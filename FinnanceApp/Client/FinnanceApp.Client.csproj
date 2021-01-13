@@ -32,4 +32,8 @@
     <ProjectReference Include="..\Shared\FinnanceApp.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\AuthPages\" />
+  </ItemGroup>
+
 </Project>
