@@ -1,0 +1,99 @@
+@page "/bills/add"
+@inject FinnanceApp.Client.Services.IPersonService _pService
+@inject FinnanceApp.Client.Services.IShopService _shop
+@inject FinnanceApp.Client.Services.IBillService _bill
+@inject NavigationManager _nav
+@implements IDisposable
+@attribute [Authorize]
+@if (_shop.Shops.Count == 0 || _pService.People.Count == 0)
+{
+    <h1>Przed dodaniem rachunku musisz dodać jakiś <a href="shoppersonlist">Sklep I Płatnika </a> </h1>
+}
+else
+{
+    <div class="container-fluid">
+        <EditForm Model="@bill" OnValidSubmit="HandleAdd">
+            <h1>Dodawanie Rachunku</h1>
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group">
+                <label for="Money">Kwota</label>
+                <input type="number" step="0.01" @bind-value="bill.money" class="form-control" />
+
+            </div>
+            <form>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="startUnitId">Płatnik</label>
+                            <InputSelect class="form-control" @bind-Value="@bill.PersonId">
+                                @foreach (var person in _pService.People)
+                                    {
+                                    <option value="@person.id">@person.name</option>
+                                    }
+                            </InputSelect>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="startUnitId">Sklep</label>
+                            <InputSelect class="form-control" @bind-Value="@bill.ShopId">
+                                @foreach (var shop in _shop.Shops)
+                                    {
+                                    <option value="@shop.id">@shop.name</option>
+                                    }
+                            </InputSelect>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-group">
+                <label>Data Zakupu</label>
+                <InputDate class="form-control" @bind-Value="@bill.BuyDate">
+
+                </InputDate>
+            </div>
+            <div class="form-group">
+                <label for="startUnitId">Komentarz</label>
+                <InputTextArea class="form-control" @bind-Value="@bill.comment"></InputTextArea>
+            </div>
+            <input class="btn btn-primary" type="submit" Value="Dodaj">
+
+        </EditForm>
+    </div>
+}
+@code {
+    FinnanceApp.Shared.Models.Bills bill = new FinnanceApp.Shared.Models.Bills();
+    protected override async Task OnInitializedAsync()
+    {
+        await _pService.GetPersonList();
+        await _shop.GetShopList();
+        if (!(_shop.Shops.Count == 0 || _pService.People.Count == 0))
+        {
+            bill.PersonId = _pService.People.FirstOrDefault().id;
+            bill.ShopId = _shop.Shops.FirstOrDefault().id;
+        }
+    }
+    async void HandleAdd()
+    {
+        
+        bill.CategoryId=1;
+        var result = await _bill.AddBill(bill);
+               _nav.NavigateTo("/bills/page/1");
+    }
+    public void Dispose()
+    {
+
+    }
+   
+}
+<style>
+    body {
+        color: #6e707e;
+    }
+
+    h1 {
+        justify-content: center;
+        text-align: center;
+    }
+</style>

@@ -4,7 +4,6 @@
 @inject FinnanceApp.Client.Services.IBillService billService
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager _nav
-@inject NotificationService notificationService
 @implements IDisposable
 @attribute [Authorize]
 
@@ -51,8 +50,7 @@
     </div>
 
 </div>
-@if(!(billService.billWithPages.Count<10))
-{
+
 <div class="row justify-content-center">
     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group mr-2" role="group" aria-label="First group">
@@ -73,7 +71,6 @@
         </div>
     </div>
 </div>
-}
 
 
 
