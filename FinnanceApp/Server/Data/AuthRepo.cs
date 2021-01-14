@@ -29,7 +29,7 @@ namespace FinnanceApp.Server.Data
         public async Task<ServiceResponse<string>> Login(string email, string passowrd, bool RememberMe)
         {
             var response = new ServiceResponse<string>();
-            User user = await _context.Users.FirstOrDefaultAsync(x => x.Email.ToLower() == email.ToLower());
+            User user = await _context.Users.Include(entity => entity.role).FirstOrDefaultAsync(x => x.Email.ToLower() == email.ToLower());
             if (user == null)
             {
                 response.isSuccess = false;
@@ -121,7 +121,7 @@ namespace FinnanceApp.Server.Data
             {
                 new Claim(ClaimTypes.NameIdentifier, user.id.ToString()),
                 new Claim(ClaimTypes.Name,user.Username),
-                new Claim(ClaimTypes.Role,"Admin")
+                new Claim(ClaimTypes.Role,user.role.RoleName)
 
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(

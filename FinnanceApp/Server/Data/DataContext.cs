@@ -1,17 +1,16 @@
 ﻿using FinnanceApp.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Data
 {
-    public class DataContext :DbContext
+    public partial class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-
+            
         }
         
         public DbSet<User> Users { get; set; }
@@ -19,6 +18,7 @@ namespace FinnanceApp.Server.Data
         public DbSet<Person> Person { get; set; }
         public DbSet<Bills> Bills { get; set; }
         public DbSet<Roles> Roles { get; set; }
+
 
     }
 }
