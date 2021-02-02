@@ -11,5 +11,6 @@ namespace FinnanceApp.Client.Services
        Task<ServiceResponse<int>> register(UserRegister request);
         Task<ServiceResponse<string>> login(UserLogin request);
         Task<ServiceResponse<string>> activate(string key);
+
     }
 }

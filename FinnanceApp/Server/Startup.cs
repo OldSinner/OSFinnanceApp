@@ -33,6 +33,10 @@ namespace FinnanceApp.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            });
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("SqlLiteDb")));
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -76,7 +80,7 @@ namespace FinnanceApp.Server
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
-
+            app.UseCors("CorsPolicy");
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
