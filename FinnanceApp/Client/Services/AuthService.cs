@@ -38,6 +38,17 @@ namespace FinnanceApp.Client.Services
 
             return await result.Content.ReadFromJsonAsync<ServiceResponse<int>>();
         }
+        public async Task<User> getUser()
+        {
+            var result = await _http.GetFromJsonAsync<User>("api/user");
+
+            return result;
+        }
+        public async Task<ServiceResponse<int>> EditProfile(EditProfile profile)
+        {
+            var result = await _http.PostAsJsonAsync("api/user/edit",profile);
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<int>>();
+        }
 
     }
 }

@@ -56,7 +56,7 @@ namespace FinnanceApp.Server.Data
 
         public async Task<ServiceResponse<int>> Register(User user, string password)
         {
-            if (await UserExist(user.Email) || user.Username=="root")
+            if (await UserExist(user.Email) || user.Username == "root")
             {
                 return new ServiceResponse<int>
                 {
@@ -112,10 +112,10 @@ namespace FinnanceApp.Server.Data
         private string CreateToken(User user, bool remember)
         {
             DateTime expires_date = new DateTime();
-            if(remember)
-            expires_date = DateTime.Now.AddMonths(1);
+            if (remember)
+                expires_date = DateTime.Now.AddMonths(1);
             else
-            expires_date = DateTime.Now.AddHours(1);
+                expires_date = DateTime.Now.AddHours(1);
 
             var claims = new List<Claim>
             {
@@ -129,7 +129,7 @@ namespace FinnanceApp.Server.Data
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: expires_date,  
+                expires: expires_date,
                 signingCredentials: cred
                 );
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
@@ -154,7 +154,7 @@ namespace FinnanceApp.Server.Data
                     Message = "Ten użytkownik jest już aktywny!"
                 };
             else
-           {                         
+            {
                 user.isConfirmed = true;
                 user.activationkey = null;
                 _context.Users.Update(user);
@@ -166,6 +166,47 @@ namespace FinnanceApp.Server.Data
                 };
             }
 
+        }
+        public async Task<ServiceResponse<int>> EditProfile(EditProfile profile)
+        {
+            var user = await _context.Users.Where(x => x.Email == profile.Email).FirstOrDefaultAsync();
+            if (!VerifyPassword(profile.Password, user.PasswordHash, user.PasswordSalt))
+            {
+                return new ServiceResponse<int>
+                {
+                    Data = 0,
+                    isSuccess = false,
+                    Message = "Niepoprawne hasło!"
+                };
+            }
+            if(isWhiteSpace(profile.Username))
+            {
+                return new ServiceResponse<int>
+                {
+                    Data = 0,
+                    isSuccess = false,
+                    Message = "W nazwie użytkownika nie może być spacji!"
+                };
+            }
+            user.Username = profile.Username;
+            user.targetValue = profile.TargetValue;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+            return new ServiceResponse<int>
+            {
+                Data = 1,
+                isSuccess = true,
+                Message = "Dokonano zmian! Zaloguj się ponownie, by zmiany były widoczne!"
+            };
+        }
+        private bool isWhiteSpace(string str )
+        {
+           for (int i = 0;i<str.Length ; i++)
+           {
+               if(str[i]==' ')
+               return true;
+           }
+           return false;
         }
     }
 }

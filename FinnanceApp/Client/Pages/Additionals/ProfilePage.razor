@@ -1,0 +1,113 @@
+@page "/profile"
+@inject FinnanceApp.Client.Services.IAuthService _aService
+<AuthorizeView>
+    <Authorized Context="Auth">
+        <div class="card shadow h-100 py-2">
+            <div class="container">
+                <h1>Profil</h1>
+                <hr>
+                <div class="row">
+                    <!-- left column -->
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <img class="avatar img-profile rounded-circle" alt="avatar"
+                                src="@GetUserAvatar(@Auth.User.Claims.FirstOrDefault().Value)"
+                                onerror="this.src='Avatars/avatar_0.jpg';">
+                            <h6>Załącz nowy awatar</h6>
+                            <input type="file" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- edit form column -->
+                    <div class="col-md-9 personal-info">
+                        <EditForm class="form-horizontal" role="form" Model="@editProfile" OnValidSubmit="HandleEdit">
+                            <Alert Message="@message" MessageType="@messageType"></Alert>
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Nazwa użytkownika</label>
+                                <div class="col-lg-8">
+                                    <input class="form-control" type="text" @bind-value="editProfile.Username">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Email:</label>
+                                <div class="col-lg-8">
+                                    <input class="form-control" type="text" disabled="true"
+                                        @bind-value="editProfile.Email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Hasło:</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" type="password" @bind-value="editProfile.Password">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Cel miesięczny:</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" type="number" @bind-value="editProfile.TargetValue">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"></label>
+                                <div class="col-md-8">
+                                    <input type="submit" class="btn btn-primary" disabled="@isBusy"
+                                        value="Zapisz zmiany">
+                                </div>
+                            </div>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </Authorized>
+</AuthorizeView>
+
+@code{
+    private bool isBusy = false;
+    FinnanceApp.Shared.Models.EditProfile editProfile = new FinnanceApp.Shared.Models.EditProfile();
+    Models.AlertMessageType messageType = Models.AlertMessageType.Success;
+    string message = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        var user = await _aService.getUser();
+        FinnanceApp.Shared.Models.EditProfile eprofile = new FinnanceApp.Shared.Models.EditProfile()
+        {
+            Username = user.Username,
+            Email = user.Email,
+            TargetValue = user.targetValue
+        };
+        editProfile = eprofile;
+    }
+    string GetUserAvatar(string id)
+    {
+        return "Avatars/avatar_" + id + ".jpg";
+    }
+    async Task HandleEdit()
+    {
+        isBusy = true;
+        var response = await _aService.EditProfile(editProfile);
+        if(!response.isSuccess)
+        {
+            
+            message = response.Message;
+            messageType = Models.AlertMessageType.Error;
+        }
+        else
+        {
+           message = response.Message;
+            messageType = Models.AlertMessageType.Success;
+        }
+        isBusy=false;
+
+    }
+}
+<style>
+    .img-profile {
+        height: 35%;
+        width: 35%;
+    }
+</style>

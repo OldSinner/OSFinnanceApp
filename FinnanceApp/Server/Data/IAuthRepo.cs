@@ -12,5 +12,7 @@ namespace FinnanceApp.Server.Data
         Task<bool> UserExist(string email);
         Task<ServiceResponse<string>> Login(string email, string passowrd, bool RememberMe);
         Task<ServiceResponse<string>> activatte(string key);
+
+        Task<ServiceResponse<int>> EditProfile(EditProfile profile);
     }
 }
