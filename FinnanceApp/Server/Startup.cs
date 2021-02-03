@@ -1,7 +1,7 @@
 using FinnanceApp.Server.Data;
 using FinnanceApp.Server.Services;
 using FinnanceApp.Server.Services.BillService;
-using FinnanceApp.Server.Services.ChartService;
+using FinnanceApp.Server.Services.CardService;
 using FinnanceApp.Server.Services.PersonService;
 using FinnanceApp.Server.Services.ShopService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -45,7 +45,8 @@ namespace FinnanceApp.Server
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IShopService, ShopService>();
-            services.AddScoped<IChartService, ChartService>();
+            services.AddScoped<IUtilityService, UtilityService>();
+            services.AddScoped<ICardService,CardService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(optins =>
                 {
@@ -58,7 +59,7 @@ namespace FinnanceApp.Server
                     };
                 });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<IUtilityService, UtilityService>();
+            
 
         }
 

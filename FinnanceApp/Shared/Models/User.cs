@@ -15,8 +15,12 @@ namespace FinnanceApp.Shared.Models
         public byte[] PasswordSalt { get; set; }
         public DateTime DateCreated { get; set; } = DateTime.Now;
         public bool isConfirmed { get; set; } = true;
+
+        public double targetValue { get; set; } = 1000;
         public string activationkey { get; set; }
         public int roleId { get; set; } = 1;
         public Roles role { get; set; } 
+
+
     }
 }

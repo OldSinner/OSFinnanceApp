@@ -7,28 +7,29 @@
 @implements IDisposable
 @attribute [Authorize]
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm">
-            <table class="table table-striped table-bordered" style="text-align:center;">
-                <thead class="thead-light">
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Lista Rachunków</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
                     <tr>
-                        <th class="money">Kwota</th>
-                        <th class="shop">Sklep</th>
-                        <th class="buyer">Płatnik</th>
-                        <th class="date">Data</th>
-                        <th class="description">Opis</th>
-                        <th><a href="bills/add" class="btn btn-success btn-circle" role="button" aria-pressed="true"><i class="fas fa-plus"></i></a></th>
-
+                        <th>Kwota</th>
+                        <th>Sklep</th>
+                        <th>Płatnik</th>
+                        <th>Data</th>
+                        <th>Opis</th>
+                        <th></th>
                     </tr>
                 </thead>
+                
+                <tbody>
+                    @foreach (var entry in billService.billWithPages)
+                    {
 
-
-                @foreach (var entry in billService.billWithPages)
-
-                {
-
-                    <tr style="@bck">
+                    <tr>
                         <td class="money">@entry.money zł</td>
                         <td class="shop">@entry.Shop.name</td>
                         <td class="buyer">@entry.Person.name</td>
@@ -40,15 +41,12 @@
                             </a>
                         </td>
                     </tr>
+                    }
 
-                }
-
+                </tbody>
             </table>
         </div>
-
-
     </div>
-
 </div>
 
 <div class="row justify-content-center">
@@ -56,17 +54,21 @@
         <div class="btn-group mr-2" role="group" aria-label="First group">
             @if (pageview > 2)
             {
-                <button type="button" class="btn btn-secondary" @onclick="()=>MoveTo(pageview-2)">@(pageview-2)</button>}
+                <button type="button" class="btn btn-secondary" @onclick="()=>MoveTo(pageview-2)">@(pageview-2)</button>
+            }
             @if (pageview > 1)
             {
-                <button type="button" class="btn btn-secondary" @onclick="()=>MoveTo(pageview-1)">@(pageview-1)</button>}
+                <button type="button" class="btn btn-secondary" @onclick="()=>MoveTo(pageview-1)">@(pageview-1)</button>
+            }
             <button type="button" class="btn btn-secondary disabled">@pageview</button>
             @if (pageview + 1 <= billService.pages)
             {
-                <button type="button" class="btn btn-secondary" @onclick="()=>MoveTo(pageview+1)">@(pageview+1)</button>}
+                <button type="button" class="btn btn-secondary" @onclick="()=>MoveTo(pageview+1)">@(pageview+1)</button>
+            }
             @if (pageview + 2 <= billService.pages)
             {
-                <button type="button" class="btn btn-secondary" @onclick="()=>MoveTo(pageview+2)">@(pageview+2)</button>}
+                <button type="button" class="btn btn-secondary" @onclick="()=>MoveTo(pageview+2)">@(pageview+2)</button>
+            }
 
         </div>
     </div>
@@ -75,7 +77,8 @@
 
 
 
-@code { [Parameter]
+@code {
+    [Parameter]
     public int page { get; set; }
     private int pageview { get; set; }
     string bck { get; set; } = "background-color:#fff;";
@@ -110,5 +113,5 @@
     }
 }
 <style>
-   
+
 </style>

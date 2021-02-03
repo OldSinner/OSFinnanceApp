@@ -1,0 +1,25 @@
+@inject FinnanceApp.Client.Services.CardService.ICardService _cservice
+
+<div class="card border-left-primary shadow h-100 py-2">
+    <div class="card-body">
+        <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    Wydatki (Ten Tydzień)</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">@money zł</div>
+            </div>
+            <div class="col-auto">
+                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+</div>
+@code
+{
+    double money = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        await _cservice.GetCards();
+        money = _cservice.weekSum;
+    }
+}

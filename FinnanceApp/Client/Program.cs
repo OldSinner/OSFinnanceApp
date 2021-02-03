@@ -1,6 +1,7 @@
 using Blazored.LocalStorage;
 using Blazored.Toast;
 using FinnanceApp.Client.Services;
+using FinnanceApp.Client.Services.CardService;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -29,13 +30,13 @@ namespace FinnanceApp.Client
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();
             builder.Services.AddScoped<TooltipService>();
-            builder.Services.AddScoped<IChartService, ChartService>();
             builder.Services.AddScoped<ContextMenuService>();
             builder.Services.AddScoped<IPersonService, PersonService>();
             builder.Services.AddScoped<IBillService, BillService>();
             builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
             builder.Services.AddScoped<IShopService, ShopService>();
             builder.Services.AddScoped<NotificationService>();
+            builder.Services.AddScoped<ICardService,CardService>();
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
             await builder.Build().RunAsync();

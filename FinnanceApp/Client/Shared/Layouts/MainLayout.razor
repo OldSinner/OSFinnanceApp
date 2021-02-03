@@ -26,7 +26,7 @@
 </AuthorizeView>
 <AuthorizeView>
     <Authorized>
-        
+
 
         <body id="page-top">
 
@@ -113,9 +113,21 @@
                                             class="mr-2 d-none d-lg-inline text-gray-600 small">@context.User.Identity.Name</span>
                                         <img class="img-profile rounded-circle"
                                             src="@GetUserAvatar(@context.User.Claims.FirstOrDefault().Value)"
-                                            onerror="this.src='Avatars/avatar_0.jpg';" @onclick="ShowModal">
+                                            onerror="this.src='Avatars/avatar_0.jpg';">
 
                                     </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                        aria-labelledby="userDropdown">
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Profil
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="logout" >
+                                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                            Wyloguj
+                                        </a>
+                                    </div>
 
                                 </li>
 
@@ -153,17 +165,12 @@
         <FinnanceApp.Client.Pages.Redirect.RedirectToLogin></FinnanceApp.Client.Pages.Redirect.RedirectToLogin>
     </NotAuthorized>
 </AuthorizeView>
-<ProfileModal @ref="profModal"></ProfileModal>
 
 @code
 {
-    protected ProfModal profModal {get;set;}
     string GetUserAvatar(string id)
     {
         return "Avatars/avatar_" + id + ".jpg";
     }
-    void ShowModal()
-    {
-      profModal.showModal();
-    }
+
 }

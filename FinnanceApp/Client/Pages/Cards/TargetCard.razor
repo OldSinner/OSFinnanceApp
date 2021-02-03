@@ -1,0 +1,50 @@
+@inject FinnanceApp.Client.Services.CardService.ICardService _cservice
+
+<div class="card border-left-info shadow h-100 py-2">
+    <div class="card-body">
+        <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Cel miesięczny
+                </div>
+                <div class="row no-gutters align-items-center">
+                    <div class="col-auto">
+                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">@prc%</div>
+                    </div>
+                    <div class="col">
+                        <div class="progress progress-sm mr-2">
+                            <div class="progress-bar @colorType" role="progressbar" style="width: @prc%"
+                                aria-valuenow="prc" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto">
+                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    double prc = 50;
+    string colorType;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await _cservice.GetCards();
+        prc = Math.Round(_cservice.targetSum, 0);
+        if (prc < 50)
+        {
+            colorType = "bg-info";
+        }
+        else if (prc < 100)
+        {
+            colorType = "bg-warning";
+        }
+        else
+        {
+            colorType = "bg-danger";
+        }
+    }
+}

@@ -1,0 +1,37 @@
+@inject FinnanceApp.Client.Services.CardService.ICardService _cservice
+
+<div class="card border-left-danger shadow h-100 py-2">
+    <div class="card-body">
+        <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                    Wydatki (Względem poprzedniego miesiąca) </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">@money @valuetype </div>
+            </div>
+            <div class="col-auto">
+                <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+            </div>
+        </div>
+    </div>
+</div>
+@code
+{
+    double money = 0;
+    string valuetype;
+    protected override async Task OnInitializedAsync()
+    {
+        await _cservice.GetCards();
+        money = _cservice.diffSum;
+        if (money < 0)
+        {
+            money = -money;
+            valuetype = "zł więcej";
+        }
+        else
+        {
+            
+            valuetype = "zł mniej";
+        }
+
+    }
+}
