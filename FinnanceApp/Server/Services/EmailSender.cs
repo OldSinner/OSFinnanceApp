@@ -25,7 +25,7 @@ namespace FinnanceApp.Server.Services
         public async Task SendEmailActivate(int id, string email)
         {
             KeyGenerator gen = new KeyGenerator();
-            var key = gen.GetRandomString(10);
+            var key = gen.GetRandomString();
             var user = await _context.Users.FirstOrDefaultAsync(x => x.id == id);
             user.activationkey=key;
             _context.Users.Update(user);
@@ -55,7 +55,7 @@ namespace FinnanceApp.Server.Services
                 Subject = "Aktywuj konto na platformie OS!",
                 Body = $"Witaj w Serwisie OSFinnaneApp!\n\n" +
                 $"Został już Ci tylko ostatni krok przed dołączeniem!\n" +
-                $"Aktywuj swoje konto używając linku: http://osfinnanceapp.tk/activate/{id}key={key}" +
+                $"Aktywuj swoje konto używając linku: https://localhost:5001/activation/{key}" +
                 "\n\n\n Z poważaniem \n OSFinnance App"
             };
             message.To.Add(reciver);

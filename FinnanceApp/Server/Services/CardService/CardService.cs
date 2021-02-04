@@ -88,6 +88,8 @@ namespace FinnanceApp.Server.Services.CardService
         {
             var actualMonth = await MonthSum();
             var user = await _utility.GetUser();
+            if(user.targetValue==0)
+            user.targetValue=1;
             var prc = (actualMonth.Data/user.targetValue)*100;
             return new ServiceResponse<double>
             {

@@ -1,20 +1,22 @@
 using System;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace FinnanceApp.Server.Additional
 {
     public class KeyGenerator
     {
-        public string GetRandomString(int string_length)
+        public string GetRandomString()
         {
-            using (var random = new RNGCryptoServiceProvider())
-            {
-                var bit_count = (string_length * 6);
-                var byte_count = ((bit_count + 7) / 8);
-                var bytes = new byte[byte_count];
-                random.GetBytes(bytes);
-                return Convert.ToBase64String(bytes);
-            }
+            Guid guid = Guid.NewGuid();
+            string rString = Convert.ToBase64String(guid.ToByteArray());
+            rString = rString.Replace("=", "");
+            rString = rString.Replace("-", "");  
+            rString = rString.Replace("+", ""); 
+            rString = rString.Replace("/", ""); 
+            rString = rString.Replace(";", ""); 
+            return rString;
+
         }
     }
 }
