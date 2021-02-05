@@ -8,6 +8,7 @@ using FinnanceApp.Server.Additional;
 using FinnanceApp.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 
 namespace FinnanceApp.Server.Services
 {
@@ -27,7 +28,7 @@ namespace FinnanceApp.Server.Services
             KeyGenerator gen = new KeyGenerator();
             var key = gen.GetRandomString();
             var user = await _context.Users.FirstOrDefaultAsync(x => x.id == id);
-            user.activationkey=key;
+            user.activationkey = key;
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
             SmtpClient client = new SmtpClient()
@@ -46,7 +47,7 @@ namespace FinnanceApp.Server.Services
             };
             MailAddress basic = new MailAddress("oldsinnernorreply@gmail.com", "Do Not Reply");
             MailAddress reciver = new MailAddress(email, "New Account!");
-            
+
 
             string url = _config.GetValue<string>("Passwords:domain");
             MailMessage message = new MailMessage()
@@ -62,9 +63,13 @@ namespace FinnanceApp.Server.Services
             try
             {
                 await client.SendMailAsync(message);
+                Log.Information("Sended activation mail for: " + user.id);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error occurs during sending mail: ||" + ex.Message);
 
             }
-            catch { }
 
 
         }

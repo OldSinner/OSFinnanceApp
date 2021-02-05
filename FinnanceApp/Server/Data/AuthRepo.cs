@@ -1,4 +1,5 @@
-﻿using FinnanceApp.Server.Services;
+﻿using System.Threading;
+using FinnanceApp.Server.Services;
 using FinnanceApp.Server.Services.BillService;
 using FinnanceApp.Server.Services.PersonService;
 using FinnanceApp.Server.Services.ShopService;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -79,6 +81,7 @@ namespace FinnanceApp.Server.Data
             await _context.AddAsync(user);
             await _context.SaveChangesAsync();
             await _emailSender.SendEmailActivate(user.id, user.Email);
+            Log.Information("New user registered: " + user.id + "/" + user.Username);
             return new ServiceResponse<int>
             {
                 Data = user.id,
@@ -165,6 +168,7 @@ namespace FinnanceApp.Server.Data
                 };
             else
             {
+                Log.Information(user.id + " activated!");
                 user.isConfirmed = true;
                 user.activationkey = null;
                 _context.Users.Update(user);
@@ -257,6 +261,7 @@ namespace FinnanceApp.Server.Data
             }
             _context.Users.Remove(_user);
             await _context.SaveChangesAsync();
+            Log.Information("User deleted: " + user.id + "/" + user.Username);
             return new ServiceResponse<string>
                 {
                     Data = String.Empty,

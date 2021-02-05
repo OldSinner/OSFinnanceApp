@@ -5,6 +5,7 @@ using FinnanceApp.Server.Data;
 using FinnanceApp.Server.Services.BillService;
 using FinnanceApp.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace FinnanceApp.Server.Services.MontlyService
 {
@@ -45,6 +46,7 @@ namespace FinnanceApp.Server.Services.MontlyService
                         comment = "Miesięczny rachunek: " + bill.description
                     };
                     _context.Bills.Add(nBill);
+                    Log.Information("Added Montly Bill for: " + nBill.OwnerId);
                 }
                 await _context.SaveChangesAsync();
             }

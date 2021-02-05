@@ -5,6 +5,7 @@ using FinnanceApp.Server.Services.BillService;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using FinnanceApp.Server.Data;
+using Serilog;
 
 namespace FinnanceApp.Server.Services.MontlyService
 {
@@ -32,6 +33,7 @@ namespace FinnanceApp.Server.Services.MontlyService
 
         private async void test(object state)
         {
+            Log.Information("Started Daily check of Montly Bills");
             using (var scope = _scopeFactory.CreateScope())
             {
                 var _montlyService = scope.ServiceProvider.GetRequiredService<IMontlyService>();
@@ -40,6 +42,7 @@ namespace FinnanceApp.Server.Services.MontlyService
                 await _userService.DeleteInactiveUser();
 
             }
+             Log.Information("End Daily check of Montly Bills");
 
         }
     }

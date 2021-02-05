@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,10 @@ namespace FinnanceApp.Server
     {
         public static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File("logs/log.log", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
             CreateHostBuilder(args).Build().Run();
         }
 
