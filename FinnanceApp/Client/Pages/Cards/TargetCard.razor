@@ -1,4 +1,4 @@
-@inject FinnanceApp.Client.Services.CardService.ICardService _cservice
+
 
 <div class="card border-left-info shadow h-100 py-2">
     <div class="card-body">
@@ -27,14 +27,13 @@
 
 @code
 {
-    double prc = 50;
+    [Parameter]
+    public double prc  {get;set;} = 50;
     string colorType;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await _cservice.GetCards();
-        prc = Math.Round(_cservice.targetSum, 0);
-        if (prc < 50)
+                if (prc < 50)
         {
             colorType = "bg-info";
         }

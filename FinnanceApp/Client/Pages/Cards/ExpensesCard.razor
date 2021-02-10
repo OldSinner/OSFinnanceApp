@@ -1,4 +1,4 @@
-@inject FinnanceApp.Client.Services.CardService.ICardService _cservice
+
 
 <div class="card border-left-success shadow h-100 py-2">
     <div class="card-body">
@@ -16,10 +16,7 @@
 </div>
 @code
 {
- double money =0;
-  protected override async Task OnInitializedAsync()
-  {
-      await _cservice.GetCards();
-      money = _cservice.monthSum;
-  }
+ [Parameter]
+    public double money {get;set;}= 0;
+ 
 }
