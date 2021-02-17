@@ -36,15 +36,18 @@ namespace FinnanceApp.Server.Data
 
         public async Task<ServiceResponse<string>> Login(string email, string passowrd, bool RememberMe)
         {
+            Log.Information("User:" + email + " is logging...");
             var response = new ServiceResponse<string>();
             User user = await _context.Users.Include(entity => entity.role).FirstOrDefaultAsync(x => x.Email.ToLower() == email.ToLower());
             if (user == null)
             {
+                Log.Error("User:" + email + ": User not Found");
                 response.isSuccess = false;
                 response.Message = "Nie znaleziono użytkownika";
             }
             else if (!VerifyPassword(passowrd, user.PasswordHash, user.PasswordSalt))
             {
+                Log.Error("User:" + email + ": Wrong Password");
                 response.isSuccess = false;
                 response.Message = "Hasło jest niepoprawne";
             }
@@ -60,7 +63,9 @@ namespace FinnanceApp.Server.Data
                 await _context.SaveChangesAsync();
                 response.Data = CreateToken(user, RememberMe);
                 response.Message = "Zalogowano!";
+                Log.Information("User:" + email + " Logged");
             }
+            
             return response;
 
         }

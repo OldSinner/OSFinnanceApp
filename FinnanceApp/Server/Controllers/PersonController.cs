@@ -27,7 +27,7 @@ namespace FinnanceApp.Server.Controllers
             _personService = personService;
         }
         
-        [HttpPost("AddPerson")]
+        [HttpPost]
         public async Task<IActionResult> addperson([FromBody] string name)
         {
             var response = await _personService.AddPerson(name);
@@ -38,7 +38,7 @@ namespace FinnanceApp.Server.Controllers
             return Ok(response);
 
         }
-        [HttpPost("EditPerson")]
+        [HttpPut]
         public async Task<IActionResult> EditPerson([FromBody] Person person)
         {
             var response = await _personService.EditPerson(person);
@@ -48,8 +48,8 @@ namespace FinnanceApp.Server.Controllers
             }
             return Ok(response);
         }
-        [HttpPost("DeletePerson")]
-        public async Task<IActionResult> DeletePerson([FromBody] int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePerson(int id)
         {
             var response = await _personService.DeletePerson(id);
             if (!response.isSuccess)
@@ -58,7 +58,7 @@ namespace FinnanceApp.Server.Controllers
             }
             return Ok(response);
         }
-        [HttpGet("GetPerson")]
+        [HttpGet]
         public async Task<IActionResult> GetPerson()
         {
             var response = await _personService.GetPersonList();

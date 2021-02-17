@@ -53,8 +53,9 @@ namespace FinnanceApp.Server.Services.BillService
 
         public async Task<ServiceResponse<int>> DeleteBill(int id)
         {
+            var user = await _utilityService.GetUser();
             ServiceResponse<int> response = new ServiceResponse<int>();
-            var bill = await _context.Bills.FirstOrDefaultAsync(b => b.id == id);
+            var bill = await _context.Bills.FirstOrDefaultAsync(b => b.id == id && b.Owner.id == user.id);
             if (bill == null)
             {
                 response.isSuccess = false;
@@ -70,24 +71,11 @@ namespace FinnanceApp.Server.Services.BillService
             }
             return response;
         }
-
-        public async Task<ServiceResponse<List<Bills>>> getBillsList()
-        {
-            ServiceResponse<List<Bills>> response = new ServiceResponse<List<Bills>>();
-            var user = await _utilityService.GetUser();
-            var bills = await _context.Bills.Where(x => x.Owner.id == user.id).Include(entity => entity.Shop).Include(entity => entity.Person).ToListAsync();
-            response.isSuccess = true;
-            Console.WriteLine(bills.Count);
-            response.Message = "Załadowano listę sklepów";
-            response.Data = bills;
-            return response;
-
-        }
         public async Task<ServiceResponse<List<Bills>>> getBillsListWithPages(int page)
         {
             ServiceResponse<List<Bills>> response = new ServiceResponse<List<Bills>>();
             var user = await _utilityService.GetUser();
-            var bills = await _context.Bills.Where(x => x.Owner.id == user.id).Include(entity => entity.Shop).Include(entity => entity.Person).OrderByDescending(x => x.BuyDate).Skip(page * 10).Take(10).ToListAsync();
+            var bills = await _context.Bills.Where(x => x.Owner.id == user.id).Include(entity => entity.Shop).Include(entity => entity.Person).Include(entity => entity.Category).OrderByDescending(x => x.BuyDate).Skip(page * 10).Take(10).ToListAsync();
             var pages = _context.Bills.Where(x => x.Owner.id == user.id).Count()/10;
             if(_context.Bills.Where(x => x.Owner.id == user.id).Count()%10 > 0) pages+=1;
             response.isSuccess = true;

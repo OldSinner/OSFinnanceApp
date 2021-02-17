@@ -69,9 +69,9 @@ namespace FinnanceApp.Server.Services.PersonService
 
         public async Task<ServiceResponse<string>> DeletePerson(int id)
         {
+            var user = await _utilityService.GetUser();
             ServiceResponse<string> response = new ServiceResponse<string>();
-            List<Bills> bills = await _context.Bills.Where(b => b.PersonId == id).ToListAsync();
-            Person dbperson = await _context.Person.FirstOrDefaultAsync(u => u.id == id);
+            Person dbperson = await _context.Person.FirstOrDefaultAsync(u => u.id == id && u.Owner == user);
             if (dbperson == null)
             {
                 response.isSuccess = false;
@@ -79,6 +79,7 @@ namespace FinnanceApp.Server.Services.PersonService
             }
             else
             {
+                List<Bills> bills = await _context.Bills.Where(b => b.PersonId == id).ToListAsync();
                 foreach (var bill in bills)
                 {
                     _context.Bills.Remove(bill);

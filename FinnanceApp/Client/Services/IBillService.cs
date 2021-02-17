@@ -16,7 +16,6 @@ namespace FinnanceApp.Client.Services
 
         IList<Bills> billWithPages { get; set; }
         Task<ServiceResponse<int>> AddBill(Bills bill);
-        Task GetBillList();
         Task<ServiceResponse<int>> DeleteBill(int id, int page);
 
         Task GetBillListWithPages(int page);

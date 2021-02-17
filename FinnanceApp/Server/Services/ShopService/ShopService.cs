@@ -84,8 +84,8 @@ namespace FinnanceApp.Server.Services.ShopService
         public async Task<ServiceResponse<string>> DeleteShop(int id)
         {
             var response = new ServiceResponse<string>();
-            List<Bills> bills = await _context.Bills.Where(b => b.ShopId == id).ToListAsync();
-            Shops dbshop = await _context.Shops.FirstOrDefaultAsync(u => u.id == id);
+            var user = await _utilityService.GetUser();
+            Shops dbshop = await _context.Shops.FirstOrDefaultAsync(u => u.id == id && u.Owner == user);
             if (dbshop == null)
             {
                 response.isSuccess = false;
@@ -93,6 +93,7 @@ namespace FinnanceApp.Server.Services.ShopService
             }
             else
             {
+                List<Bills> bills = await _context.Bills.Where(b => b.ShopId == id).ToListAsync();
                 foreach (var bill in bills)
                 {
                     _context.Bills.Remove(bill);

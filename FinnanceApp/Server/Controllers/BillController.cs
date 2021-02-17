@@ -25,7 +25,7 @@ namespace FinnanceApp.Server.Controllers
         {
             _bill = bill;
         }
-        [HttpPost("AddBill")]
+        [HttpPost]
         public async Task<IActionResult> AddBill([FromBody] Bills bill)
         {
             var response = await _bill.AddBill(bill);
@@ -36,17 +36,8 @@ namespace FinnanceApp.Server.Controllers
             return Ok(response);
 
         }
-        [HttpGet("GetBill")]
-        public async Task<IActionResult> GetBill()
-        {
-            var response = await _bill.getBillsList();
-            if (!response.isSuccess)
-            {
-                return BadRequest(response);
-            }
-            return Ok(response);
-        }
-        [HttpGet("GetBillPages")]
+    
+        [HttpGet]
         public async Task<IActionResult> GetBillPages(int page)
         {
             var response = await _bill.getBillsListWithPages(page);
@@ -56,8 +47,8 @@ namespace FinnanceApp.Server.Controllers
             }
             return Ok(response);
         }
-        [HttpPost("DeleteBill")]
-        public async Task<IActionResult> DeleteBill([FromBody] int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBill(int id)
         {
             var response = await _bill.DeleteBill(id);
             if (!response.isSuccess)

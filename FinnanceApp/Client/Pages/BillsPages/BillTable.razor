@@ -22,6 +22,7 @@
                         <th>Płatnik</th>
                         <th>Data</th>
                         <th>Opis</th>
+                        <th>Kategoria</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -36,6 +37,7 @@
                         <td class="buyer">@entry.Person.name</td>
                         <td class="date">@entry.BuyDate.Date.ToString("dd/MM/yyyy")</td>
                         <td class="description">@entry.comment</td>
+                        <td> <i class="fas @entry.Category.icon_code"/> @entry.Category.name</td>
                         <td class="bills">
                             <a @onclick="() => DeleteBill(entry.id)" type="button" class="btn btn-danger btn-circle">
                                 <i class="fas fa-trash" style="color:white;"></i>

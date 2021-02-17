@@ -25,7 +25,7 @@ namespace FinnanceApp.Server.Controllers
         {
             _shopService = shopService;
         }
-        [HttpGet("GetShop")]
+        [HttpGet]
         public async Task<IActionResult> GetShop()
         {
             var response = await _shopService.GetShopList();
@@ -36,7 +36,7 @@ namespace FinnanceApp.Server.Controllers
             return Ok(response);
         }
 
-        [HttpPost("AddShop")]
+        [HttpPost]
         public async Task<IActionResult> addshop([FromBody] string name)
         {
             var response = await _shopService.AddShop(name);
@@ -48,8 +48,8 @@ namespace FinnanceApp.Server.Controllers
 
         }
 
-        [HttpPost("DeleteShop")]
-        public async Task<IActionResult> DeleteShop([FromBody] int id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteShop(int id)
         {
             var response = await _shopService.DeleteShop(id);
             if (!response.isSuccess)
@@ -58,7 +58,7 @@ namespace FinnanceApp.Server.Controllers
             }
             return Ok(response);
         }
-        [HttpPost("EditShop")]
+        [HttpPut]
         public async Task<IActionResult> EditShop([FromBody] Shops shop)
         {
             var response = await _shopService.EditShop(shop);

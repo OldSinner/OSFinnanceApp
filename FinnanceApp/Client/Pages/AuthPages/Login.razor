@@ -79,6 +79,7 @@
         var result = await AuthServ.login(user);
         if (result.isSuccess)
         {
+            Console.WriteLine(result.Data);
             await LocalStorage.SetItemAsync<string>("AuthToken", result.Data);
             await AuthStateProvider.GetAuthenticationStateAsync();
             navigationManager.NavigateTo("");

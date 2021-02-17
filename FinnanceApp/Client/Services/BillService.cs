@@ -30,18 +30,10 @@ namespace FinnanceApp.Client.Services
         }
         public int pages { get; set; } = new int();
 
-        public async Task GetBillList()
-        {
-
-            var result = await _http.GetFromJsonAsync<ServiceResponse<List<Bills>>>("api/Bill/GetBill");
-            bill = result.Data;
-
-
-        }
-
+       
         public async Task<ServiceResponse<int>> AddBill(Bills billtoadd)
         {
-            var result = await _http.PostAsJsonAsync<Bills>("api/Bill/AddBill", billtoadd);
+            var result = await _http.PostAsJsonAsync<Bills>("api/Bill", billtoadd);
 
             return await result.Content.ReadFromJsonAsync<ServiceResponse<int>>();
 
@@ -50,7 +42,7 @@ namespace FinnanceApp.Client.Services
 
         public async Task<ServiceResponse<int>> DeleteBill(int id, int page)
         {
-            var result = await _http.PostAsJsonAsync<int>("api/Bill/DeleteBill", id);
+            var result = await _http.DeleteAsync("api/Bill/"+id);
             billWithPages.Clear();
             await GetBillListWithPages(page);
             BillsChanged();
@@ -60,7 +52,7 @@ namespace FinnanceApp.Client.Services
         public async Task GetBillListWithPages(int page)
         {
             billWithPages.Clear();
-            var result = await _http.GetFromJsonAsync<ServiceResponse<List<Bills>>>($"api/Bill/GetBillPages?page={page}");
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<Bills>>>($"api/Bill?page={page}");
             billWithPages = result.Data;
             pages = Int16.Parse(result.Message);
         }

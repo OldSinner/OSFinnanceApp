@@ -25,7 +25,7 @@ namespace FinnanceApp.Client.Services
         {
             if (string.IsNullOrWhiteSpace(name))
                 name = " ";
-            var result = await _http.PostAsJsonAsync<string>("api/Person/AddPerson", name);
+            var result = await _http.PostAsJsonAsync<string>("api/Person", name);
             var x = await result.Content.ReadFromJsonAsync<ServiceResponse<int>>();
             People.Clear();
             await GetPersonList();
@@ -37,7 +37,7 @@ namespace FinnanceApp.Client.Services
         public async Task<ServiceResponse<string>> editPerson(int id, string name)
         {
             Person person = new Person { id = id, Owner = null, name = name };
-            var result = await _http.PostAsJsonAsync<Person>("api/Person/EditPerson", person);
+            var result = await _http.PutAsJsonAsync<Person>("api/Person", person);
 
             People.Clear();
             await GetPersonList();
@@ -50,7 +50,7 @@ namespace FinnanceApp.Client.Services
         {
             if(People.Count==0)
             {
-                var result = await _http.GetFromJsonAsync<ServiceResponse<List<Person>>>("api/Person/GetPerson");
+                var result = await _http.GetFromJsonAsync<ServiceResponse<List<Person>>>("api/Person");
                 People = result.Data;
             }
             
@@ -59,7 +59,7 @@ namespace FinnanceApp.Client.Services
 
         public async Task<ServiceResponse<string>> deletePerson(int id)
         {
-            var result = await _http.PostAsJsonAsync<int>("api/Person/DeletePerson", id);
+            var result = await _http.DeleteAsync("api/Person/"+ id);
             People.Clear();
             await GetPersonList();
             PersonChanged();

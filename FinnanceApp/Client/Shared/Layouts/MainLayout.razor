@@ -14,13 +14,18 @@
             <i class="fas fa-th-list"></i>
             <span>Lista Użytkowników</span>
         </a>
+    </li>
     <li class="nav-item">
+        <a class="nav-link" href="/bills/page/1">
+            <i class="fas fa-th-list"></i>
+            <span>Kategorie</span>
+        </a>
+    </li>
+     <li class="nav-item">
         <a class="nav-link" href="/bills/page/1">
             <i class="fas fa-th-list"></i>
             <span>Ustawienia Aplikacji</span>
         </a>
-
-    </li>
 
     </li>
 </AuthorizeView>
@@ -124,7 +129,7 @@
                                             Profil
                                         </a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="logout" >
+                                        <a class="dropdown-item" href="logout">
                                             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                             Wyloguj
                                         </a>
@@ -163,7 +168,7 @@
         </body>
     </Authorized>
     <NotAuthorized>
-       <FinnanceApp.Client.Pages.Redirect.RedirectToLogin></FinnanceApp.Client.Pages.Redirect.RedirectToLogin>
+        <FinnanceApp.Client.Pages.Redirect.RedirectToLogin></FinnanceApp.Client.Pages.Redirect.RedirectToLogin>
     </NotAuthorized>
 </AuthorizeView>
 

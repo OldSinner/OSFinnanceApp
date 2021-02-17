@@ -22,7 +22,7 @@ namespace FinnanceApp.Client.Services
         {
             if (Shops.Count == 0)
             {
-                var result = await _http.GetFromJsonAsync<ServiceResponse<List<Shops>>>("api/Shops/GetShop");
+                var result = await _http.GetFromJsonAsync<ServiceResponse<List<Shops>>>("api/Shops");
                 
                 Shops = result.Data;
                 
@@ -30,7 +30,7 @@ namespace FinnanceApp.Client.Services
         }
         public async Task<ServiceResponse<string>> DeleteShop(int id)
         {
-            var result = await _http.PostAsJsonAsync<int>("api/Shops/DeleteShop", id);
+            var result = await _http.DeleteAsync("api/Shops/"+ id);
             var x = await result.Content.ReadFromJsonAsync<ServiceResponse<string>>();
             Shops.Clear();
             await GetShopList();
@@ -41,7 +41,7 @@ namespace FinnanceApp.Client.Services
         {
             if (string.IsNullOrWhiteSpace(name))
                 name = " ";
-            var result = await _http.PostAsJsonAsync<string>("api/Shops/AddShop", name);
+            var result = await _http.PostAsJsonAsync<string>("api/Shops", name);
             var x = await result.Content.ReadFromJsonAsync<ServiceResponse<int>>();
             Shops.Clear();
             await GetShopList();
@@ -52,7 +52,7 @@ namespace FinnanceApp.Client.Services
         public async Task<ServiceResponse<int>> editShop(int id, string name)
         {
             Shops shop = new Shops { id = id, Owner = null, name = name };
-            var result = await _http.PostAsJsonAsync<Shops>("api/Shops/EditShop", shop);
+            var result = await _http.PutAsJsonAsync<Shops>("api/Shops", shop);
             var x = await result.Content.ReadFromJsonAsync<ServiceResponse<int>>();
             Shops.Clear();
             await GetShopList();
