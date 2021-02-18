@@ -3,6 +3,7 @@
 @inject FinnanceApp.Client.Services.IPersonService _pService
 @inject FinnanceApp.Client.Services.IShopService _shop
 @inject FinnanceApp.Client.Services.IBillService _bill
+@inject FinnanceApp.Client.Services.ICategoryService _category
 @inject NavigationManager _nav
 @implements IDisposable
 @attribute [Authorize]
@@ -46,6 +47,17 @@ else
                             </InputSelect>
                         </div>
                     </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="startUnitId">Kategoria</label>
+                            <InputSelect class="form-control" @bind-Value="@bill.CategoryId">
+                                @foreach (var category in _category.category)
+                                    {
+                                    <option value="@category.id">@category.name</option>
+                                    }
+                            </InputSelect>
+                        </div>
+                    </div>
                 </div>
             </form>
             <div class="form-group">
@@ -68,17 +80,17 @@ else
     protected override async Task OnInitializedAsync()
     {
         await _pService.GetPersonList();
+        await _category.GetCategory();
         await _shop.GetShopList();
         if (!(_shop.Shops.Count == 0 || _pService.People.Count == 0))
         {
+            bill.CategoryId = _category.category.FirstOrDefault().id;
             bill.PersonId = _pService.People.FirstOrDefault().id;
             bill.ShopId = _shop.Shops.FirstOrDefault().id;
         }
     }
     async void HandleAdd()
     {
-        
-        bill.CategoryId=1;
         var result = await _bill.AddBill(bill);
                _nav.NavigateTo("/bills/page/1");
     }

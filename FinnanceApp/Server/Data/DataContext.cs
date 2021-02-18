@@ -20,6 +20,8 @@ namespace FinnanceApp.Server.Data
         public DbSet<Roles> Roles { get; set; }
         public DbSet<MontlyBills> MontlyBills { get; set; }
 
+        public DbSet<Category> Category {get; set;}
+
 
     }
 }

@@ -10,5 +10,7 @@ namespace FinnanceApp.Shared.Models
         public Shops shop { get; set; }
         public Person person { get; set; }
         public User user { get; set; }
+
+        public Category category { get; set; }
     }
 }

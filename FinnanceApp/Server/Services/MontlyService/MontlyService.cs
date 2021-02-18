@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FinnanceApp.Server.Data;
@@ -13,9 +14,11 @@ namespace FinnanceApp.Server.Services.MontlyService
     {
         private readonly DataContext _context;
         private readonly IBillService _billService;
+        private readonly IUtilityService _utility;
 
-        public MontlyService(DataContext context, IBillService billService)
+        public MontlyService(DataContext context, IBillService billService, IUtilityService utility)
         {
+            _utility = utility;
             _context = context;
             _billService = billService;
         }
@@ -56,6 +59,8 @@ namespace FinnanceApp.Server.Services.MontlyService
 
         public async Task<ServiceResponse<string>> AddMontlyBill(MontlyBills bill)
         {
+            var user = await _utility.GetUser();
+            bill.user = user;
             await _context.MontlyBills.AddAsync(bill);
             await _context.SaveChangesAsync();
             return new ServiceResponse<string>
@@ -67,9 +72,11 @@ namespace FinnanceApp.Server.Services.MontlyService
 
         }
 
-        public async Task<ServiceResponse<string>> DeleteMontlyBill(MontlyBills bill)
+
+        public async Task<ServiceResponse<string>> DeleteMontlyBill(int id)
         {
-            var dBill = await _context.MontlyBills.Where(x => x.id == bill.id).FirstOrDefaultAsync();
+            var user = await _utility.GetUser();
+            var dBill = await _context.MontlyBills.Where(x => x.id == id && x.user == user).FirstOrDefaultAsync();
             if (dBill == null)
             {
                 return new ServiceResponse<string>
@@ -89,9 +96,11 @@ namespace FinnanceApp.Server.Services.MontlyService
             };
         }
 
+
         public async Task<ServiceResponse<string>> EditMontyBill(MontlyBills bill)
         {
-            var dBill = await _context.MontlyBills.Where(x => x.id == bill.id).FirstOrDefaultAsync();
+             var user = await _utility.GetUser();
+            var dBill = await _context.MontlyBills.Where(x => x.id == bill.id && x.user == user).FirstOrDefaultAsync();
             if (dBill == null)
             {
                 return new ServiceResponse<string>
@@ -110,5 +119,17 @@ namespace FinnanceApp.Server.Services.MontlyService
                 Message = "Zedytowano rachunek miesięczny"
             };
         }
+        public async Task<ServiceResponse<List<MontlyBills>>> GetMontlyBill()
+        {
+            var user = await _utility.GetUser();
+            var mBills = await _context.MontlyBills.Where(x => x.user == user).Include(entity => entity.shop).Include(entity => entity.person).Include(entity => entity.category).ToListAsync();
+            return new ServiceResponse<List<MontlyBills>>
+            {
+                Data = mBills,
+                isSuccess = true,
+                Message = "Usunięto rachunek miesięczny!"
+            };
+        }
+
     }
 }

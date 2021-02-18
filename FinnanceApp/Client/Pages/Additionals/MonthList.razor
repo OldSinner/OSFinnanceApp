@@ -1,0 +1,63 @@
+@page "/monthlist"
+@using FinnanceApp.Shared.Models
+@layout MainLayout
+@inject FinnanceApp.Client.Services.MonthlyService.IMonthlyService _montlyService
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Lista Rachunków Miesięcznych</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Kwota</th>
+                        <th>Sklep</th>
+                        <th>Płatnik</th>
+                        <th>Dzień miesiąca</th>
+                        <th>Opis</th>
+                        <th>Kategoria</th>
+                        <th><a class="btn btn-success btn-circle"><i style="color:white;" class="fas fa-plus"></i></a></th>
+                                       
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var entry in _montlyService.montlyBills)
+                    {
+
+                        <tr>
+                            <td class="money">@entry.value zł</td>
+                            <td class="shop">@entry.shop.name</td>
+                            <td class="buyer">@entry.person.name</td>
+                            <td class="date">@entry.dayOfMonth</td>
+                            <td class="description">@entry.description</td>
+                            <td> <i class="fas @entry.category.icon_code" />@entry.category.name </td>
+                            <td>
+                                <a @onclick="@(() => EditMBill(entry))" class="btn btn-info btn-circle">
+                                    <i style="color:white;" class="far fa-edit"></i> </a>
+                                <a @onclick="@(() => DeleteMBill(entry))" class="btn btn-danger btn-circle">
+                                    <i style="color:white;" class="fas fa-trash"></i> </a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        await _montlyService.GetMonthlyBills();
+    }
+    private async void EditMBill(MontlyBills bill)
+    {
+
+    }
+    private async void DeleteMBill(MontlyBills bill)
+    {
+
+    }
+}

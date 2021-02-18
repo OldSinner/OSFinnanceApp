@@ -37,7 +37,7 @@ namespace FinnanceApp.Client
                 {
                     identity = new ClaimsIdentity(ParseClaimsFromJwt(authToken), "jwt");
                     _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
-                    //await _shopService.GetShopList();
+                    await _shopService.GetShopList();
                 }
                 catch (Exception)
                 {
