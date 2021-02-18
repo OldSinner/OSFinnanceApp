@@ -14,32 +14,41 @@ namespace FinnanceApp.Client.Services.MonthlyService
         public event Action OnChange;
         void MBillsChanged() => OnChange.Invoke();
         public IList<MontlyBills> montlyBills { get; set; } = new List<MontlyBills>();
-        
+
         public MonthlyService(HttpClient http)
         {
             _http = http;
         }
-        public Task<ServiceResponse<string>> AddMontlyBill(MontlyBills montly)
+        public async Task<ServiceResponse<string>> AddMontlyBill(MontlyBills montly)
         {
-            throw new System.NotImplementedException();
+            var response = await _http.PostAsJsonAsync<MontlyBills>("api/MontlyBill", montly);
+            return await response.Content.ReadFromJsonAsync<ServiceResponse<string>>();
         }
 
-        public Task<ServiceResponse<string>> DeleteMontlyBill(int id)
+        public async Task<ServiceResponse<string>> DeleteMontlyBill(int id)
         {
-            throw new System.NotImplementedException();
+            var response = await _http.DeleteAsync("api/MontlyBill/" + id);
+            montlyBills.Clear();
+            await GetMonthlyBills();
+            MBillsChanged();
+            return await response.Content.ReadFromJsonAsync<ServiceResponse<string>>();
         }
 
-        public Task<ServiceResponse<string>> EditMontlyBill(MontlyBills montly)
+        public async Task<ServiceResponse<string>> EditMontlyBill(MontlyBills montly)
         {
-            throw new System.NotImplementedException();
+            var response = await _http.PutAsJsonAsync<MontlyBills>("api/MontlyBill", montly);
+            montlyBills.Clear();
+            await GetMonthlyBills();
+            MBillsChanged();
+            return await response.Content.ReadFromJsonAsync<ServiceResponse<string>>();
         }
 
         public async Task GetMonthlyBills()
         {
-            if(montlyBills.Count==0)
+            if (montlyBills.Count == 0)
             {
                 var result = await _http.GetFromJsonAsync<ServiceResponse<List<MontlyBills>>>("api/MontlyBill");
-                if(result.isSuccess)
+                if (result.isSuccess)
                 {
                     montlyBills.Clear();
                     montlyBills = result.Data;
@@ -47,6 +56,6 @@ namespace FinnanceApp.Client.Services.MonthlyService
             }
         }
 
-        
+
     }
 }

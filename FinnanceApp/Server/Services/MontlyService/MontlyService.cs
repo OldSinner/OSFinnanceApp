@@ -25,8 +25,8 @@ namespace FinnanceApp.Server.Services.MontlyService
 
         public async Task AddBillsFromMontlyBill()
         {
-            var bills = await _context.MontlyBills.Where(x => x.dayOfMonth == DateTime.Now.Day).ToListAsync();
-            if (DateTime.Now.Month == 2)
+            var bills = await _context.MontlyBills.Where(x => x.dayOfMonth == DateTime.Now.Day).Include(entity => entity.user).ToListAsync();
+            if (DateTime.Now.Month == 2 && DateTime.Now.Day > 28)
             {
                 var febBill = await _context.MontlyBills.Where(x => x.dayOfMonth > 28).ToListAsync();
                 foreach (var bill in febBill)
@@ -41,12 +41,13 @@ namespace FinnanceApp.Server.Services.MontlyService
                     var nBill = new Bills
                     {
                         money = bill.value,
-                        Owner = bill.user,
-                        Shop = bill.shop,
-                        Person = bill.person,
+                        OwnerId = bill.user.id,
+                        ShopId = bill.shopid,
+                        PersonId = bill.personid,
                         BuyDate = DateTime.Now,
                         CreatedDate = DateTime.Now,
-                        comment = "Miesięczny rachunek: " + bill.description
+                        CategoryId = bill.categoryId,
+                        comment = "Miesięczny rachunek \""+bill.name+"\": " + bill.description
                     };
                     _context.Bills.Add(nBill);
                     Log.Information("Added Montly Bill for: " + nBill.OwnerId);
@@ -92,7 +93,7 @@ namespace FinnanceApp.Server.Services.MontlyService
             {
                 Data = String.Empty,
                 isSuccess = true,
-                Message = "Usunięto rachunek miesięczny!"
+                Message = $"Usunięto rachunek miesięczny: {dBill.name}!"
             };
         }
 

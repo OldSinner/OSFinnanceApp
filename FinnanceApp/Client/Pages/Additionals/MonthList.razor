@@ -2,23 +2,28 @@
 @using FinnanceApp.Shared.Models
 @layout MainLayout
 @inject FinnanceApp.Client.Services.MonthlyService.IMonthlyService _montlyService
+@implements IDisposable
+@attribute [Authorize]
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Lista Rachunków Miesięcznych</h6>
+        <Alert Message="@message" MessageType="@messageType"></Alert>
     </div>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
+                        <th>Nazwa Rachunku</th>
                         <th>Kwota</th>
                         <th>Sklep</th>
                         <th>Płatnik</th>
                         <th>Dzień miesiąca</th>
                         <th>Opis</th>
                         <th>Kategoria</th>
-                        <th><a class="btn btn-success btn-circle"><i style="color:white;" class="fas fa-plus"></i></a></th>
-                                       
+                        <th><a class="btn btn-success btn-circle" href="/monthlist/add"><i style="color:white;"
+                                    class="fas fa-plus"></i></a></th>
+
                     </tr>
                 </thead>
 
@@ -27,6 +32,7 @@
                     {
 
                         <tr>
+                            <td>@entry.name</td>
                             <td class="money">@entry.value zł</td>
                             <td class="shop">@entry.shop.name</td>
                             <td class="buyer">@entry.person.name</td>
@@ -34,9 +40,7 @@
                             <td class="description">@entry.description</td>
                             <td> <i class="fas @entry.category.icon_code" />@entry.category.name </td>
                             <td>
-                                <a @onclick="@(() => EditMBill(entry))" class="btn btn-info btn-circle">
-                                    <i style="color:white;" class="far fa-edit"></i> </a>
-                                <a @onclick="@(() => DeleteMBill(entry))" class="btn btn-danger btn-circle">
+                                <a @onclick="@(() => DeleteMBill(entry.id))" class="btn btn-danger btn-circle">
                                     <i style="color:white;" class="fas fa-trash"></i> </a>
                             </td>
                         </tr>
@@ -48,16 +52,29 @@
     </div>
 </div>
 @code{
+    Models.AlertMessageType messageType = Models.AlertMessageType.Success;
+    public string message { get; set; } = String.Empty;
     protected override async Task OnInitializedAsync()
     {
+        _montlyService.OnChange += StateHasChanged;
         await _montlyService.GetMonthlyBills();
     }
-    private async void EditMBill(MontlyBills bill)
+    private async void DeleteMBill(int id)
     {
-
+        var result = await _montlyService.DeleteMontlyBill(id);
+        if (result.isSuccess)
+        {
+            messageType = Models.AlertMessageType.Success;
+            message = result.Message;
+        }
+        else
+        {
+            messageType = Models.AlertMessageType.Error;
+            message = "Nie Udało się usunąć rachunku, odśwież stronę!";
+        }
     }
-    private async void DeleteMBill(MontlyBills bill)
+    public void Dispose()
     {
-
+        _montlyService.OnChange -= StateHasChanged;
     }
 }

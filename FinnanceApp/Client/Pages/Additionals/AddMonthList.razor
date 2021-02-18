@@ -1,0 +1,113 @@
+@page "/monthlist/add"
+@using FinnanceApp.Shared.Models
+@layout MainLayout
+@inject FinnanceApp.Client.Services.IPersonService _pService
+@inject FinnanceApp.Client.Services.IShopService _shop
+@inject FinnanceApp.Client.Services.ICategoryService _category
+@inject FinnanceApp.Client.Services.MonthlyService.IMonthlyService _mService
+@inject NavigationManager _nav
+@attribute [Authorize]
+@if (_shop.Shops.Count == 0 || _pService.People.Count == 0)
+{
+    <h1>Przed dodaniem rachunku musisz dodać jakiś <a href="list">Sklep I Płatnika </a> </h1>
+}
+else
+{
+<div class="container-fluid">
+    <EditForm Model="@mBills" OnValidSubmit="HandleAdd">
+        <h1>Dodawanie Miesięcznego Rachunku</h1>
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="Money">Nazwa Rachunku</label>
+                    <input type="text" @bind-value="mBills.name" class="form-control" />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="Money">Kwota Rachunku</label>
+                    <input type="number" step="0.01" @bind-value="mBills.value" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="Money">Dzień miesiąca w którym ma być dodany rachunek</label>
+                    <input type="number" step="1" min="1" max="31" @bind-value="mBills.dayOfMonth"
+                        class="form-control" />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="startUnitId">Kategoria</label>
+                    <InputSelect class="form-control" @bind-Value="@mBills.categoryId">
+                        @foreach (var category in _category.category)
+                        {
+                            <option value="@category.id">@category.name</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="startUnitId">Płatnik</label>
+                    <InputSelect class="form-control" @bind-Value="@mBills.personid">
+                        @foreach (var person in _pService.People)
+                        {
+                            <option value="@person.id">@person.name</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="startUnitId">Sklep</label>
+                    <InputSelect class="form-control" @bind-Value="@mBills.shopid">
+                        @foreach (var shop in _shop.Shops)
+                        {
+                            <option value="@shop.id">@shop.name</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+                <label for="startUnitId">Komentarz</label>
+                <InputTextArea class="form-control" @bind-Value="@mBills.description"></InputTextArea>
+            </div>
+        <input class="btn btn-primary" disabled="@disable" type="submit" Value="Dodaj">
+    </EditForm>
+</div>
+}
+
+@code{
+    MontlyBills mBills = new MontlyBills();
+    bool disable = false;
+    protected override async Task OnInitializedAsync()
+    {
+        await _pService.GetPersonList();
+        await _category.GetCategory();
+        await _shop.GetShopList();
+        if (!(_shop.Shops.Count == 0 || _pService.People.Count == 0))
+        {
+            mBills.categoryId = _category.category.FirstOrDefault().id;
+            mBills.personid = _pService.People.FirstOrDefault().id;
+            mBills.shopid = _shop.Shops.FirstOrDefault().id;
+        }
+    }
+    async void HandleAdd()
+    {
+      disable=true;
+      var result = await _mService.AddMontlyBill(mBills);
+      if(result.isSuccess)
+      {
+          disable=false;
+       _nav.NavigateTo("/monthlist",true);
+      }
+    }
+}
