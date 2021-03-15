@@ -12,6 +12,9 @@ namespace FinnanceApp.Server.Services.ChartService
     public interface IChartService
     {
         Task<ServiceResponse<List<ChartMonth>>> GetMonthChart();
+        Task<ServiceResponse<List<ChartMonth>>> GetPersonChart();
+
+        Task<ServiceResponse<List<ChartMonth>>> GetCategoryChart();
 
     }
 

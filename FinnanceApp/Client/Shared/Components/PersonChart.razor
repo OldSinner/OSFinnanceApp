@@ -1,0 +1,22 @@
+@inject FinnanceApp.Client.Services.IChartService _chartService
+@inject IJSRuntime jsRunTime;
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Wydatki na osobe</h6>
+        </div>
+        <div class="card-body">
+            <div class="chart-pie pt-4">
+                <canvas id="donutChart"></canvas>
+            </div>
+        </div>
+    </div>
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+      await _chartService.GetPersonChart();
+      var mLabel = _chartService.chartPerson.Select(x=>x.month).ToList();
+      var mValue = _chartService.chartPerson.Select(x=>x.money).ToList();
+      await jsRunTime.InvokeVoidAsync("GeneratePersonChart", mLabel,mValue);
+    }
+}

@@ -130,7 +130,7 @@ namespace FinnanceApp.Server.Data
         {
             DateTime expires_date = new DateTime();
             if (remember)
-                expires_date = DateTime.Now.AddMonths(1);
+                expires_date = DateTime.Now.AddYears(1);
             else
                 expires_date = DateTime.Now.AddHours(1);
 

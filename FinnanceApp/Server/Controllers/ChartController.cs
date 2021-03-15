@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,10 +22,20 @@ namespace FinnanceApp.Server.Controllers
         {
             _chartService = chartService;
         }
-        [HttpGet]
+        [HttpGet("month")]
         public async Task<IActionResult> GetMonthChart()
         {
             var response = await _chartService.GetMonthChart();
+            if (!response.isSuccess)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+        [HttpGet("person")]
+        public async Task<IActionResult> GetPersonChart()
+        {
+            var response = await _chartService.GetPersonChart();
             if (!response.isSuccess)
             {
                 return BadRequest(response);

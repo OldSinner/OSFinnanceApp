@@ -22,6 +22,9 @@
     <div class="col-xl-8 col-lg-7">
       <FinnanceApp.Client.Shared.Components.MonthChart></FinnanceApp.Client.Shared.Components.MonthChart>
     </div>
+    <div class="col-xl-4 col-lg-5">
+        <FinnanceApp.Client.Shared.Components.PersonChart></FinnanceApp.Client.Shared.Components.PersonChart>
+    </div>
 </div>
 @code{
     double expenses = 0;
@@ -31,9 +34,19 @@
     protected override async Task OnInitializedAsync()
     {
         await _cservice.GetCards();
-        expenses = _cservice.monthSum;
-        exweek = _cservice.weekSum;
-        diff = _cservice.diffSum;
+        expenses = Math.Round(_cservice.monthSum,2);
+        exweek = Math.Round(_cservice.weekSum,2);
+        diff = Math.Round(_cservice.diffSum, 2);
         target = Math.Round(_cservice.targetSum, 0);
     }
 }
+<style>
+    .row.display-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+.row.display-flex > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
+</style>
