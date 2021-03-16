@@ -1,0 +1,50 @@
+@page "/auserlist"
+@attribute [Authorize(Roles="Admin")]
+@inject FinnanceApp.Client.Services.AdminService.IAdminService _adminService
+@layout MainLayout
+<table class="table table-striped table-bordered" style="text-align:center;">
+
+    <thead>
+        <tr>
+            <th id="a">Adres-Email</th>
+            <th>UserName</th>
+            <th>LastLogin</th>
+            <th>Role</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in _adminService.userList)
+        {
+            <tr>
+                <td>@entry.Email</td>
+                <td>@entry.Username</td>
+                <td>@entry.lastLogged</td>
+                <td>@entry.role.RoleName</td>
+                <td>
+                    <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false" style="color:white;">
+                        Take Action
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item">Activate account</a>
+                        <a class="dropdown-item">Grant Admin</a>
+                        <a class="dropdown-item">Grant User</a>
+                        <a class="dropdown-item">Select as a Inactive</a>
+
+                    </div>
+
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        await _adminService.GetUserList();
+    }
+}

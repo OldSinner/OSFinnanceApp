@@ -14,14 +14,13 @@ namespace FinnanceApp.Server.Controllers
     [Authorize]
     public class MontlyBillController : ControllerBase
     {
-        private readonly IUtilityService _utility;
+
         private readonly IMontlyService _montlyBills;
         private readonly DataContext _context;
 
-        public MontlyBillController(IUtilityService utility, IMontlyService montlyBills, DataContext context)
+        public MontlyBillController(IMontlyService montlyBills, DataContext context)
         {
             _context = context;
-            _utility = utility;
             _montlyBills = montlyBills;
         }
         [HttpPost]

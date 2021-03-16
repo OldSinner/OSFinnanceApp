@@ -1,5 +1,6 @@
 using FinnanceApp.Server.Data;
 using FinnanceApp.Server.Services;
+using FinnanceApp.Server.Services.AdminService;
 using FinnanceApp.Server.Services.BillService;
 using FinnanceApp.Server.Services.CardService;
 using FinnanceApp.Server.Services.ChartService;
@@ -51,6 +52,7 @@ namespace FinnanceApp.Server
             services.AddScoped<IUtilityService, UtilityService>();
             services.AddScoped<ICardService,CardService>();
             services.AddScoped<IMontlyService,MontlyService>();
+            services.AddScoped<IAdminService,AdminService>();
             services.AddScoped<IChartService,ChartService>();
             services.AddHostedService<MontlyBillService>();
             services.AddHostedService<UserControllService>();

@@ -1,6 +1,7 @@
 using Blazored.LocalStorage;
 using Blazored.Toast;
 using FinnanceApp.Client.Services;
+using FinnanceApp.Client.Services.AdminService;
 using FinnanceApp.Client.Services.CardService;
 using FinnanceApp.Client.Services.MonthlyService;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -42,6 +43,7 @@ namespace FinnanceApp.Client
             builder.Services.AddScoped<IMonthlyService,MonthlyService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IAdditionalService,AdditionalService>();
+            builder.Services.AddScoped<IAdminService,AdminService>();
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
             await builder.Build().RunAsync();
