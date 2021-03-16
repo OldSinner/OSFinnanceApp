@@ -33,16 +33,18 @@ namespace FinnanceApp.Server.Services.MontlyService
 
         private async void test(object state)
         {
-            Log.Information("Started Daily check of Montly Bills");
+           
             using (var scope = _scopeFactory.CreateScope())
             {
+                 Log.Information("Started Daily check of Montly Bills");
                 var _montlyService = scope.ServiceProvider.GetRequiredService<IMontlyService>();
                 await _montlyService.AddBillsFromMontlyBill();
                 var _userService = scope.ServiceProvider.GetRequiredService<IAuthRepo>();
                 await _userService.DeleteInactiveUser();
+                 Log.Information("End Daily check of Montly Bills");
 
             }
-             Log.Information("End Daily check of Montly Bills");
+            
 
         }
     }
