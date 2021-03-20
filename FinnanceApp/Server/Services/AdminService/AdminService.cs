@@ -64,7 +64,7 @@ namespace FinnanceApp.Server.Services.AdminService
                 {
                     Data = null,
                     isSuccess = false,
-                    Message = "Wystąpił błąd"
+                    Message = x.Message
                 };
             }
 
