@@ -3,6 +3,7 @@
 @using System.IO;
 @using Tewr.Blazor.FileReader
 @inject IFileReaderService _fileService
+@inject HttpClient _http
 @inject FinnanceApp.Client.Services.IAuthService _aService
 @attribute [Authorize]
 <AuthorizeView>
@@ -19,8 +20,10 @@
                                 src="@GetUserAvatar(@Auth.User.Claims.FirstOrDefault().Value)"
                                 onerror="this.src='Avatars/avatar_0.jpg';">
                             <h6>Załącz nowy awatar</h6>
-                            <input type="file" class="form-control">
-                            <button class="btn btn-block btn-primary" style="margin=5;">Zmień awatar</button>
+                            <input type="file" class="form-control" @ref="input"
+                                @onchange="async () => await ImageChangedAsync()">
+                            <button class="btn btn-block btn-primary" style="margin=5;"
+                                @onclick="async () => await UploadFileAsync()">Zmień awatar</button>
                         </div>
                     </div>
 
@@ -73,6 +76,9 @@
 </AuthorizeView>
 
 @code{
+    ElementReference input;
+    Stream filestream = null;
+    string fileName = String.Empty;
     private bool isBusy = false;
     FinnanceApp.Shared.Models.EditProfile editProfile = new FinnanceApp.Shared.Models.EditProfile();
     Models.AlertMessageType messageType = Models.AlertMessageType.Success;
@@ -92,22 +98,53 @@
     {
         return "Avatars/avatar_" + id + ".jpg";
     }
+
+    async Task ImageChangedAsync()
+    {
+        var file = (await _fileService.CreateReference(input).EnumerateFilesAsync()).FirstOrDefault();
+        if (file == null)
+            return;
+        var fileinfo =  await file.ReadFileInfoAsync();
+        fileName = fileinfo.Name;
+        using(var ms = await file.CreateMemoryStreamAsync((int)fileinfo.Size))
+        {
+            filestream = new MemoryStream(ms.ToArray());
+        }
+    }
+    async Task UploadFileAsync()
+    {
+        var content = new MultipartFormDataContent();
+        content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
+        content.Add(new StreamContent(filestream, (int)filestream.Length), "image",fileName);
+
+        var response = await _http.PostAsync("api/Avatar", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            message ="New Avatar added corectly";
+        }else
+        {
+            message = response.Content.ToString();
+        }
+
+    }
+
     async Task HandleEdit()
     {
         isBusy = true;
         var response = await _aService.EditProfile(editProfile);
-        if(!response.isSuccess)
+        if (!response.isSuccess)
         {
-            
+
             message = response.Message;
             messageType = Models.AlertMessageType.Error;
         }
         else
         {
-           message = response.Message;
+            message = response.Message;
             messageType = Models.AlertMessageType.Success;
         }
-        isBusy=false;
+        isBusy = false;
 
     }
 }

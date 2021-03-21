@@ -29,7 +29,9 @@ namespace FinnanceApp.Client
 
 
             builder.Services.AddBlazoredLocalStorage();
-            builder.Services.AddFileReaderService();
+            builder.Services.AddFileReaderService(options => {
+                options.UseWasmSharedBuffer = true;
+            });
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();
