@@ -45,12 +45,12 @@ namespace FinnanceApp.Client
                     identity = new ClaimsIdentity();
                 }
             }
-                         
+
             var user = new ClaimsPrincipal(identity);
             var state = new AuthenticationState(user);
             NotifyAuthenticationStateChanged(Task.FromResult(state));
             return state;
-            
+
         }
         private byte[] ParseBase64WithoutPadding(string base64)
         {

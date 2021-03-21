@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
-using FinnanceApp.Server.Additional;
+﻿using FinnanceApp.Server.Additional;
 using FinnanceApp.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using System;
+using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Services
 {

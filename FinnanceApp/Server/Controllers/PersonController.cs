@@ -1,14 +1,7 @@
-﻿using FinnanceApp.Server.Data;
-using FinnanceApp.Server.Services;
-using FinnanceApp.Server.Services.PersonService;
+﻿using FinnanceApp.Server.Services.PersonService;
 using FinnanceApp.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Controllers
@@ -18,15 +11,15 @@ namespace FinnanceApp.Server.Controllers
     [Authorize]
     public class PersonController : ControllerBase
     {
-       
+
         private readonly IPersonService _personService;
 
-        public PersonController( IPersonService personService)
+        public PersonController(IPersonService personService)
         {
-           
+
             _personService = personService;
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> addperson([FromBody] string name)
         {

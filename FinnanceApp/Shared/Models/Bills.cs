@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FinnanceApp.Shared.Models
 {
@@ -18,11 +14,11 @@ namespace FinnanceApp.Shared.Models
         public int ShopId { get; set; }
         public Person Person { get; set; }
         public int PersonId { get; set; }
-        public int CategoryId { get; set; } 
+        public int CategoryId { get; set; }
         public Category Category { get; set; }
         public DateTime BuyDate { get; set; } = DateTime.Now;
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-        [StringLength (maximumLength:200,ErrorMessage ="Komentarz za długi!")]
+        [StringLength(maximumLength: 200, ErrorMessage = "Komentarz za długi!")]
         public string comment { get; set; }
     }
 }

@@ -1,14 +1,8 @@
-﻿using FinnanceApp.Server.Services;
-using FinnanceApp.Server.Services.BillService;
+﻿using FinnanceApp.Server.Services.BillService;
 using FinnanceApp.Shared.Models;
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Controllers
@@ -18,7 +12,7 @@ namespace FinnanceApp.Server.Controllers
     [Authorize]
     public class BillController : ControllerBase
     {
-        
+
         private readonly IBillService _bill;
 
         public BillController(IBillService bill)
@@ -36,7 +30,7 @@ namespace FinnanceApp.Server.Controllers
             return Ok(response);
 
         }
-    
+
         [HttpGet]
         public async Task<IActionResult> GetBillPages(int page)
         {

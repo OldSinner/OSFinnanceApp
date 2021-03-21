@@ -11,14 +11,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using System.Linq;
 using System.Text;
 
 namespace FinnanceApp.Server
@@ -43,17 +40,17 @@ namespace FinnanceApp.Server
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("SqlLiteDb")));
             services.AddControllersWithViews();
             services.AddRazorPages();
-            
+
             services.AddScoped<IAuthRepo, AuthRepo>();
             services.AddScoped<IBillService, BillService>();
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IShopService, ShopService>();
             services.AddScoped<IUtilityService, UtilityService>();
-            services.AddScoped<ICardService,CardService>();
-            services.AddScoped<IMontlyService,MontlyService>();
-            services.AddScoped<IAdminService,AdminService>();
-            services.AddScoped<IChartService,ChartService>();
+            services.AddScoped<ICardService, CardService>();
+            services.AddScoped<IMontlyService, MontlyService>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IChartService, ChartService>();
             services.AddHostedService<MontlyBillService>();
             services.AddHostedService<UserControllService>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -68,7 +65,7 @@ namespace FinnanceApp.Server
                     };
                 });
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            
+
 
         }
 

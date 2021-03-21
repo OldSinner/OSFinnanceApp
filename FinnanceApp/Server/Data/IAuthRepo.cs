@@ -1,7 +1,4 @@
 ﻿using FinnanceApp.Shared.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Data
@@ -18,6 +15,6 @@ namespace FinnanceApp.Server.Data
         Task<ServiceResponse<string>> DeleteUser(User user);
 
         Task DeleteInactiveUser();
-        
+
     }
 }

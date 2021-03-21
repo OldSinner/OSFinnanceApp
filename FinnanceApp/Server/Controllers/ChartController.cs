@@ -1,13 +1,7 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using FinnanceApp.Server.Services;
 using FinnanceApp.Server.Services.ChartService;
-using FinnanceApp.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Controllers
 {

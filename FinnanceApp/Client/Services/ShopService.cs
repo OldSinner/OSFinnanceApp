@@ -1,7 +1,6 @@
 ﻿using FinnanceApp.Shared.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -23,14 +22,14 @@ namespace FinnanceApp.Client.Services
             if (Shops.Count == 0)
             {
                 var result = await _http.GetFromJsonAsync<ServiceResponse<List<Shops>>>("api/Shops");
-                
+
                 Shops = result.Data;
-                
+
             }
         }
         public async Task<ServiceResponse<string>> DeleteShop(int id)
         {
-            var result = await _http.DeleteAsync("api/Shops/"+ id);
+            var result = await _http.DeleteAsync("api/Shops/" + id);
             var x = await result.Content.ReadFromJsonAsync<ServiceResponse<string>>();
             Shops.Clear();
             await GetShopList();

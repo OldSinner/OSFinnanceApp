@@ -33,12 +33,12 @@ namespace FinnanceApp.Server.Migrations
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "id", "RoleName" },
-                values: new object[] { 1,"User" });
+                values: new object[] { 1, "User" });
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "id", "RoleName" },
                 values: new object[] { 2, "Admin" });
-            
+
             migrationBuilder.AddForeignKey(
                 name: "FK_Users_Roles_roleId",
                 table: "Users",

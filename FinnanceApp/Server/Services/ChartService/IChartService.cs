@@ -1,21 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using FinnanceApp.Server.Data;
 using FinnanceApp.Shared.Models;
 using FinnanceApp.Shared.Models.ChartModels;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Services.ChartService
 {
     public interface IChartService
     {
-        Task<ServiceResponse<List<ChartMonth>>> GetMonthChart();
-        Task<ServiceResponse<List<ChartMonth>>> GetPersonChart();
+        Task<ServiceResponse<List<ChartModel>>> GetMonthChart();
+        Task<ServiceResponse<List<ChartModel>>> GetPersonChart();
 
-        Task<ServiceResponse<List<ChartMonth>>> GetCategoryChart();
-        Task<ServiceResponse<List<ChartMonth>>> GetShopChart();
+        Task<ServiceResponse<List<ChartModel>>> GetCategoryChart();
+        Task<ServiceResponse<List<ChartModel>>> GetShopChart();
 
     }
 

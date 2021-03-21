@@ -1,17 +1,17 @@
+using FinnanceApp.Shared.Models.ChartModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FinnanceApp.Shared.Models.ChartModels;
 
 namespace FinnanceApp.Client.Services
 {
     public interface IChartService
     {
 
-        IList<ChartMonth> chartMonths {get;set;}
-        IList<ChartMonth> chartPerson {get;set;}
+        IList<ChartModel> chartMonths { get; set; }
+        IList<ChartModel> chartPerson { get; set; }
 
-        IList<ChartMonth> chartCategory {get;set;}
-        IList<ChartMonth> chartShop {get;set;}
+        IList<ChartModel> chartCategory { get; set; }
+        IList<ChartModel> chartShop { get; set; }
 
         Task GetMonthChart();
         Task GetPersonChart();

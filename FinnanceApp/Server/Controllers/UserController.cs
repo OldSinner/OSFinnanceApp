@@ -1,13 +1,8 @@
 ﻿using FinnanceApp.Server.Data;
 using FinnanceApp.Server.Services;
 using FinnanceApp.Shared.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Controllers
@@ -56,9 +51,9 @@ namespace FinnanceApp.Server.Controllers
         }
 
         [HttpPost("activate")]
-        public async Task<IActionResult> Activate([FromBody]string key)
+        public async Task<IActionResult> Activate([FromBody] string key)
         {
-            Console.WriteLine("Klucz który dostałem:"+key);
+            Console.WriteLine("Klucz który dostałem:" + key);
             var response = await _authRepo.activatte(key);
             if (!response.isSuccess)
             {

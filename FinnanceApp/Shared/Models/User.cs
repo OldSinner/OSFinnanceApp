@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FinnanceApp.Shared.Models
 {
@@ -19,9 +15,9 @@ namespace FinnanceApp.Shared.Models
         public double targetValue { get; set; } = 1000;
         public string activationkey { get; set; }
         public int roleId { get; set; } = 1;
-        public Roles role { get; set; } 
+        public Roles role { get; set; }
 
-        public DateTime lastLogged {get;set;} = DateTime.Now;
+        public DateTime lastLogged { get; set; } = DateTime.Now;
 
 
     }

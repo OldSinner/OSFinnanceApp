@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -30,7 +29,7 @@ namespace FinnanceApp.Client.Services
         }
         public int pages { get; set; } = new int();
 
-       
+
         public async Task<ServiceResponse<int>> AddBill(Bills billtoadd)
         {
             var result = await _http.PostAsJsonAsync<Bills>("api/Bill", billtoadd);
@@ -42,7 +41,7 @@ namespace FinnanceApp.Client.Services
 
         public async Task<ServiceResponse<int>> DeleteBill(int id, int page)
         {
-            var result = await _http.DeleteAsync("api/Bill/"+id);
+            var result = await _http.DeleteAsync("api/Bill/" + id);
             billWithPages.Clear();
             await GetBillListWithPages(page);
             BillsChanged();

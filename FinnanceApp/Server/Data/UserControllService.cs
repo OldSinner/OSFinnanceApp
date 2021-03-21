@@ -1,12 +1,11 @@
 
+using FinnanceApp.Server.Data;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using FinnanceApp.Server.Services.BillService;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using FinnanceApp.Server.Data;
-using Serilog;
 
 namespace FinnanceApp.Server.Services.MontlyService
 {

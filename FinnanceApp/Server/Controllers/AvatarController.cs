@@ -1,12 +1,11 @@
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using FinnanceApp.Server.Services;
-using FinnanceApp.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Controllers
 {
@@ -26,7 +25,7 @@ namespace FinnanceApp.Server.Controllers
         public async Task<IActionResult> PostImage([FromForm] IFormFile image)
         {
             var user = await _utility.GetUser();
-            string[] allowedExtension = { ".jpg"};
+            string[] allowedExtension = { ".jpg" };
             if (image == null || image.Length == 0)
             {
                 return BadRequest("Upload a file!");
@@ -39,7 +38,7 @@ namespace FinnanceApp.Server.Controllers
                 return BadRequest("File is not a valid image");
             }
             string newFileName = "avatar_" + user.id.ToString() + extension;
-            string filePath = Path.Combine(_webhost.ContentRootPath,"wwwroot", "Avatars", newFileName);
+            string filePath = Path.Combine(_webhost.ContentRootPath, "wwwroot", "Avatars", newFileName);
             if (System.IO.File.Exists(filePath))
             {
                 System.IO.File.Delete(filePath);

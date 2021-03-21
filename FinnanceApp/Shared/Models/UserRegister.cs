@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FinnanceApp.Shared.Models
 {
     public class UserRegister
     {
-        [Required(ErrorMessage ="Nazwa Użytkownika jest wymagana")]
-        [StringLength(100, MinimumLength = 3,ErrorMessage ="Nazwa użytkownika jest za krótka")]
+        [Required(ErrorMessage = "Nazwa Użytkownika jest wymagana")]
+        [StringLength(100, MinimumLength = 3, ErrorMessage = "Nazwa użytkownika jest za krótka")]
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Email jest wymagany")]

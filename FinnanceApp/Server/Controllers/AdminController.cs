@@ -1,13 +1,7 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using FinnanceApp.Server.Services;
 using FinnanceApp.Server.Services.AdminService;
-using FinnanceApp.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Controllers
 {
@@ -36,7 +30,7 @@ namespace FinnanceApp.Server.Controllers
             }
         }
         [HttpPost("activateuser")]
-        public async Task<IActionResult> ActivateUser([FromBody]int id)
+        public async Task<IActionResult> ActivateUser([FromBody] int id)
         {
             var response = await _admin.ActivateUser(id);
             if (!response.isSuccess)
@@ -49,7 +43,7 @@ namespace FinnanceApp.Server.Controllers
             }
         }
         [HttpPost("GrantAdmin")]
-        public async Task<IActionResult> GrantAdmin([FromBody]int id)
+        public async Task<IActionResult> GrantAdmin([FromBody] int id)
         {
             var response = await _admin.GrantAdmin(id);
             if (!response.isSuccess)
@@ -61,8 +55,8 @@ namespace FinnanceApp.Server.Controllers
                 return Ok(response);
             }
         }
-        [HttpPost("DeactiveUser")] 
-        public async Task<IActionResult> DeactiveUser([FromBody]int id)
+        [HttpPost("DeactiveUser")]
+        public async Task<IActionResult> DeactiveUser([FromBody] int id)
         {
             var response = await _admin.SelectAsInactive(id);
             if (!response.isSuccess)

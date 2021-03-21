@@ -1,10 +1,8 @@
-using System.Runtime.Intrinsics.X86;
-using System.Net.Http;
-using System.Net;
-using System.Collections.Generic;
 using FinnanceApp.Shared.Models;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Net.Http.Json;
+using System.Threading.Tasks;
 
 namespace FinnanceApp.Client.Services
 {
@@ -22,7 +20,7 @@ namespace FinnanceApp.Client.Services
         {
             category.Clear();
             category = await _httpClient.GetFromJsonAsync<List<Category>>("/api/MontlyBill/Category");
-            
+
         }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System.Threading;
-using FinnanceApp.Server.Services;
-using FinnanceApp.Server.Services.BillService;
-using FinnanceApp.Server.Services.PersonService;
-using FinnanceApp.Server.Services.ShopService;
+﻿using FinnanceApp.Server.Services;
 using FinnanceApp.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -287,7 +283,7 @@ namespace FinnanceApp.Server.Data
                     {
                         var response = await DeleteUser(user);
                     }
-                    catch(Exception x)
+                    catch (Exception x)
                     {
                         Log.Error(x.Message);
                     }

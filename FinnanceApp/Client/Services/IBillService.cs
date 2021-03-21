@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FinnanceApp.Client.Services
@@ -12,7 +11,7 @@ namespace FinnanceApp.Client.Services
         event Action OnChange;
         IList<Bills> bill { get; set; }
 
-        int pages {get;set;}
+        int pages { get; set; }
 
         IList<Bills> billWithPages { get; set; }
         Task<ServiceResponse<int>> AddBill(Bills bill);

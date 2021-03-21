@@ -1,9 +1,9 @@
+using FinnanceApp.Shared.Models;
+using FinnanceApp.Shared.Models.ChartModels;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using FinnanceApp.Shared.Models;
-using FinnanceApp.Shared.Models.ChartModels;
 
 namespace FinnanceApp.Client.Services
 {
@@ -16,16 +16,16 @@ namespace FinnanceApp.Client.Services
             _http = http;
         }
 
-        public IList<ChartMonth> chartMonths  {get;set;} = new List<ChartMonth>();
-        public IList<ChartMonth> chartPerson  {get;set;} = new List<ChartMonth>();
-        public IList<ChartMonth> chartCategory { get; set; } = new List<ChartMonth>();
-        public IList<ChartMonth> chartShop { get; set; } = new List<ChartMonth>();
+        public IList<ChartModel> chartMonths { get; set; } = new List<ChartModel>();
+        public IList<ChartModel> chartPerson { get; set; } = new List<ChartModel>();
+        public IList<ChartModel> chartCategory { get; set; } = new List<ChartModel>();
+        public IList<ChartModel> chartShop { get; set; } = new List<ChartModel>();
 
         public async Task GetCategoryChart()
         {
             chartCategory.Clear();
-            var response = await _http.GetFromJsonAsync<ServiceResponse<List<ChartMonth>>>("api/Chart/category");
-            if(response.isSuccess)
+            var response = await _http.GetFromJsonAsync<ServiceResponse<List<ChartModel>>>("api/Chart/category");
+            if (response.isSuccess)
             {
                 chartCategory = response.Data;
             }
@@ -34,7 +34,7 @@ namespace FinnanceApp.Client.Services
         public async Task GetMonthChart()
         {
             chartMonths.Clear();
-            var response = await _http.GetFromJsonAsync<ServiceResponse<List<ChartMonth>>>("api/Chart/month");
+            var response = await _http.GetFromJsonAsync<ServiceResponse<List<ChartModel>>>("api/Chart/month");
             if (response.isSuccess)
             {
                 response.Data.Reverse();
@@ -45,7 +45,7 @@ namespace FinnanceApp.Client.Services
         public async Task GetPersonChart()
         {
             chartPerson.Clear();
-             var response = await _http.GetFromJsonAsync<ServiceResponse<List<ChartMonth>>>("api/Chart/person");
+            var response = await _http.GetFromJsonAsync<ServiceResponse<List<ChartModel>>>("api/Chart/person");
             if (response.isSuccess)
             {
                 chartPerson = response.Data;
@@ -55,7 +55,7 @@ namespace FinnanceApp.Client.Services
         public async Task GetShopChart()
         {
             chartShop.Clear();
-             var response = await _http.GetFromJsonAsync<ServiceResponse<List<ChartMonth>>>("api/Chart/shop");
+            var response = await _http.GetFromJsonAsync<ServiceResponse<List<ChartModel>>>("api/Chart/shop");
             if (response.isSuccess)
             {
                 chartShop = response.Data;

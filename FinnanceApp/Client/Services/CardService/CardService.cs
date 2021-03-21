@@ -1,9 +1,9 @@
 
+using FinnanceApp.Shared.Models;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using FinnanceApp.Shared.Models;
 
 namespace FinnanceApp.Client.Services.CardService
 {
@@ -41,7 +41,7 @@ namespace FinnanceApp.Client.Services.CardService
                         diffSum = obj.Data;
                         break;
                     case "TargetSum":
-                    targetSum = obj.Data;
+                        targetSum = obj.Data;
                         break;
                 }
             }

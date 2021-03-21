@@ -1,11 +1,10 @@
+using FinnanceApp.Server.Data;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using FinnanceApp.Server.Services.BillService;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using FinnanceApp.Server.Data;
-using Serilog;
 
 namespace FinnanceApp.Server.Services.MontlyService
 {
@@ -33,18 +32,18 @@ namespace FinnanceApp.Server.Services.MontlyService
 
         private async void test(object state)
         {
-           
+
             using (var scope = _scopeFactory.CreateScope())
             {
-                 Log.Information("Started Daily check of Montly Bills");
+                Log.Information("Started Daily check of Montly Bills");
                 var _montlyService = scope.ServiceProvider.GetRequiredService<IMontlyService>();
                 await _montlyService.AddBillsFromMontlyBill();
                 var _userService = scope.ServiceProvider.GetRequiredService<IAuthRepo>();
                 await _userService.DeleteInactiveUser();
-                 Log.Information("End Daily check of Montly Bills");
+                Log.Information("End Daily check of Montly Bills");
 
             }
-            
+
 
         }
     }

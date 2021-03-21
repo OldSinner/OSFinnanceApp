@@ -1,13 +1,9 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using FinnanceApp.Server.Services;
 using FinnanceApp.Server.Services.CardService;
 using FinnanceApp.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Controllers
 {

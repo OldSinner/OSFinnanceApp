@@ -15,7 +15,7 @@ namespace FinnanceApp.Shared.Models
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Hasło musi mieć minimum 6 znaków")]
         public string Password { get; set; }
         [Required(ErrorMessage = "Cel jest wymagany")]
-        [Range(0,100000)]
+        [Range(0, 100000)]
         public double TargetValue { get; set; }
 
     }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Services.PersonService
 {
-    public class PersonService :IPersonService
+    public class PersonService : IPersonService
     {
         private readonly IUtilityService _utilityService;
         private readonly DataContext _context;
@@ -29,34 +29,36 @@ namespace FinnanceApp.Server.Services.PersonService
         }
         public async Task<ServiceResponse<int>> AddPerson(string name)
         {
-            try{
-            ServiceResponse<int> response = new ServiceResponse<int>();
-            Person person = new Person();
-            var user = await _utilityService.GetUser();
-            person.Owner = user;
-            person.name = name;
-            if (await PersonExist(person.name))
+            try
             {
-                response.isSuccess = false;
-                response.Message = "Taki Płatnik Już istnieje!";
-            }
-            else if (string.IsNullOrWhiteSpace(name))
-            {
-                response.Data = 0;
-                response.isSuccess = false;
-                response.Message = "Nazwa płatnika nie może być pusta";
-            }
-            else
-            {
-                await _context.Person.AddAsync(person);
-                await _context.SaveChangesAsync();
-                response.Data = person.id;
-                response.isSuccess = true;
-                response.Message = $"Dodano Płatnika: {person.name}";
-            }
+                ServiceResponse<int> response = new ServiceResponse<int>();
+                Person person = new Person();
+                var user = await _utilityService.GetUser();
+                person.Owner = user;
+                person.name = name;
+                if (await PersonExist(person.name))
+                {
+                    response.isSuccess = false;
+                    response.Message = "Taki Płatnik Już istnieje!";
+                }
+                else if (string.IsNullOrWhiteSpace(name))
+                {
+                    response.Data = 0;
+                    response.isSuccess = false;
+                    response.Message = "Nazwa płatnika nie może być pusta";
+                }
+                else
+                {
+                    await _context.Person.AddAsync(person);
+                    await _context.SaveChangesAsync();
+                    response.Data = person.id;
+                    response.isSuccess = true;
+                    response.Message = $"Dodano Płatnika: {person.name}";
+                }
 
-            return response;
-            }catch (Exception x)
+                return response;
+            }
+            catch (Exception x)
             {
                 return new ServiceResponse<int>
                 {
@@ -69,14 +71,16 @@ namespace FinnanceApp.Server.Services.PersonService
 
         public async Task<ServiceResponse<List<Person>>> GetPersonList()
         {
-            try{
-            ServiceResponse<List<Person>> response = new ServiceResponse<List<Person>>();
-            var user = await _utilityService.GetUser();
-            var persons = await _context.Person.Where(x => x.Owner.id == user.id).ToListAsync();
-            response.Data = persons;
-            response.isSuccess = true;
-            return response;
-            }catch (Exception x)
+            try
+            {
+                ServiceResponse<List<Person>> response = new ServiceResponse<List<Person>>();
+                var user = await _utilityService.GetUser();
+                var persons = await _context.Person.Where(x => x.Owner.id == user.id).ToListAsync();
+                response.Data = persons;
+                response.isSuccess = true;
+                return response;
+            }
+            catch (Exception x)
             {
                 return new ServiceResponse<List<Person>>
                 {
@@ -89,29 +93,31 @@ namespace FinnanceApp.Server.Services.PersonService
 
         public async Task<ServiceResponse<string>> DeletePerson(int id)
         {
-            try{
-            var user = await _utilityService.GetUser();
-            ServiceResponse<string> response = new ServiceResponse<string>();
-            Person dbperson = await _context.Person.FirstOrDefaultAsync(u => u.id == id && u.Owner == user);
-            if (dbperson == null)
+            try
             {
-                response.isSuccess = false;
-                response.Message = "Nie znaleziono osoby. Przeładuj Stronę";
-            }
-            else
-            {
-                List<Bills> bills = await _context.Bills.Where(b => b.PersonId == id).ToListAsync();
-                foreach (var bill in bills)
+                var user = await _utilityService.GetUser();
+                ServiceResponse<string> response = new ServiceResponse<string>();
+                Person dbperson = await _context.Person.FirstOrDefaultAsync(u => u.id == id && u.Owner == user);
+                if (dbperson == null)
                 {
-                    _context.Bills.Remove(bill);
+                    response.isSuccess = false;
+                    response.Message = "Nie znaleziono osoby. Przeładuj Stronę";
                 }
-                _context.Person.Remove(dbperson);
-                await _context.SaveChangesAsync();
-                response.isSuccess = true;
-                response.Message= $"Płatnik {dbperson.name} i {bills.Count} przypisanych rachunków zostały usunięte";
+                else
+                {
+                    List<Bills> bills = await _context.Bills.Where(b => b.PersonId == id).ToListAsync();
+                    foreach (var bill in bills)
+                    {
+                        _context.Bills.Remove(bill);
+                    }
+                    _context.Person.Remove(dbperson);
+                    await _context.SaveChangesAsync();
+                    response.isSuccess = true;
+                    response.Message = $"Płatnik {dbperson.name} i {bills.Count} przypisanych rachunków zostały usunięte";
+                }
+                return response;
             }
-            return response;
-            }catch (Exception x)
+            catch (Exception x)
             {
                 return new ServiceResponse<string>
                 {
@@ -120,32 +126,34 @@ namespace FinnanceApp.Server.Services.PersonService
                     isSuccess = false
                 };
             }
-           
+
         }
 
         public async Task<ServiceResponse<string>> EditPerson(Person person)
         {
-            try{
-            ServiceResponse<string> response = new ServiceResponse<string>();
-            Person dbperson = await _context.Person.FirstOrDefaultAsync(u => u.id == person.id);
-            var user = await _utilityService.GetUser();
-            if (dbperson == null)
+            try
             {
-                response.isSuccess = false;
-                response.Message = "Nie znaleziono płatnika, odśwież stronę";
+                ServiceResponse<string> response = new ServiceResponse<string>();
+                Person dbperson = await _context.Person.FirstOrDefaultAsync(u => u.id == person.id);
+                var user = await _utilityService.GetUser();
+                if (dbperson == null)
+                {
+                    response.isSuccess = false;
+                    response.Message = "Nie znaleziono płatnika, odśwież stronę";
+                }
+                else
+                {
+                    response.Message = $"Płatnik {dbperson.name} nazywa się teraz: ";
+                    dbperson.Owner = user;
+                    dbperson.name = person.name;
+                    _context.Person.Update(dbperson);
+                    await _context.SaveChangesAsync();
+                    response.isSuccess = true;
+                    response.Message += dbperson.name;
+                }
+                return response;
             }
-            else
-            {
-                response.Message = $"Płatnik {dbperson.name} nazywa się teraz: ";
-                dbperson.Owner = user;
-                dbperson.name = person.name;
-                _context.Person.Update(dbperson);
-                await _context.SaveChangesAsync();
-                response.isSuccess = true;
-                response.Message += dbperson.name; 
-            }
-            return response;
-            }catch (Exception x)
+            catch (Exception x)
             {
                 return new ServiceResponse<string>
                 {
@@ -154,7 +162,7 @@ namespace FinnanceApp.Server.Services.PersonService
                     isSuccess = false
                 };
             }
-            
+
         }
     }
 }

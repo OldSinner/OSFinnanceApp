@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
-
-using System.Threading.Tasks;
 using FinnanceApp.Server.Data;
 using FinnanceApp.Shared.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Services.AdminService
 {
@@ -76,12 +75,12 @@ namespace FinnanceApp.Server.Services.AdminService
         {
             try
             {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.id == id);
-            var role = await _context.Roles.FirstOrDefaultAsync(x => x.RoleName == "Admin");
-            user.role=role;
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
-            return new ServiceResponse<string>
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.id == id);
+                var role = await _context.Roles.FirstOrDefaultAsync(x => x.RoleName == "Admin");
+                user.role = role;
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+                return new ServiceResponse<string>
                 {
                     Data = "",
                     Message = "Nadano role Admin dla " + user.Username,
@@ -90,7 +89,7 @@ namespace FinnanceApp.Server.Services.AdminService
             }
             catch (Exception x)
             {
-              return new ServiceResponse<string>
+                return new ServiceResponse<string>
                 {
                     Data = x.Message,
                     Message = "Wystąpił błąd",
@@ -101,7 +100,7 @@ namespace FinnanceApp.Server.Services.AdminService
 
         public async Task<ServiceResponse<string>> SelectAsInactive(int id)
         {
-             try
+            try
             {
                 var user = await _context.Users.FirstOrDefaultAsync(x => x.id == id);
                 user.lastLogged = DateTime.Now.AddYears(-2);

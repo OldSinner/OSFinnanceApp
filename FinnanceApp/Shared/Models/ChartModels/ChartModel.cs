@@ -1,6 +1,6 @@
 namespace FinnanceApp.Shared.Models.ChartModels
 {
-    public class ChartMonth
+    public class ChartModel
     {
         public string month { get; set; }
         public double money { get; set; }

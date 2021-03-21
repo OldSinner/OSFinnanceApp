@@ -1,15 +1,15 @@
+using Finnanceapp.Shared.Models;
 using System;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Finnanceapp.Shared.Models;
 
 namespace FinnanceApp.Client.Services
 {
     public class AdditionalService : IAdditionalService
     {
         public async Task<CoronaCases> GetCoronaCases()
-       {
+        {
             var client = new HttpClient();
             var request = new HttpRequestMessage
             {
@@ -36,8 +36,8 @@ namespace FinnanceApp.Client.Services
             }
             return new CoronaCases();
 
-             
+
         }
     }
 
-}     
+}

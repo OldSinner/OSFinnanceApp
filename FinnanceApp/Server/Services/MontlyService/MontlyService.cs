@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FinnanceApp.Server.Data;
 using FinnanceApp.Server.Services.BillService;
 using FinnanceApp.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FinnanceApp.Server.Services.MontlyService
 {
@@ -25,38 +25,39 @@ namespace FinnanceApp.Server.Services.MontlyService
 
         public async Task AddBillsFromMontlyBill()
         {
-            try{
-            var bills = await _context.MontlyBills.Where(x => x.dayOfMonth == DateTime.Now.Day).Include(entity => entity.user).ToListAsync();
-            if (DateTime.Now.Month == 2 && DateTime.Now.Day > 28)
+            try
             {
-                var febBill = await _context.MontlyBills.Where(x => x.dayOfMonth > 28).ToListAsync();
-                foreach (var bill in febBill)
+                var bills = await _context.MontlyBills.Where(x => x.dayOfMonth == DateTime.Now.Day).Include(entity => entity.user).ToListAsync();
+                if (DateTime.Now.Month == 2 && DateTime.Now.Day > 28)
                 {
-                    bills.Add(bill);
-                }
-            }
-            if (bills.Count != 0)
-            {
-                foreach (var bill in bills)
-                {
-                    var nBill = new Bills
+                    var febBill = await _context.MontlyBills.Where(x => x.dayOfMonth > 28).ToListAsync();
+                    foreach (var bill in febBill)
                     {
-                        money = bill.value,
-                        OwnerId = bill.user.id,
-                        ShopId = bill.shopid,
-                        PersonId = bill.personid,
-                        BuyDate = DateTime.Now,
-                        CreatedDate = DateTime.Now,
-                        CategoryId = bill.categoryId,
-                        comment = "Miesięczny rachunek \""+bill.name+"\": " + bill.description
-                    };
-                    _context.Bills.Add(nBill);
-                    Log.Information("Added Montly Bill for: " + nBill.OwnerId);
+                        bills.Add(bill);
+                    }
                 }
-                await _context.SaveChangesAsync();
+                if (bills.Count != 0)
+                {
+                    foreach (var bill in bills)
+                    {
+                        var nBill = new Bills
+                        {
+                            money = bill.value,
+                            OwnerId = bill.user.id,
+                            ShopId = bill.shopid,
+                            PersonId = bill.personid,
+                            BuyDate = DateTime.Now,
+                            CreatedDate = DateTime.Now,
+                            CategoryId = bill.categoryId,
+                            comment = "Miesięczny rachunek \"" + bill.name + "\": " + bill.description
+                        };
+                        _context.Bills.Add(nBill);
+                        Log.Information("Added Montly Bill for: " + nBill.OwnerId);
+                    }
+                    await _context.SaveChangesAsync();
+                }
             }
-            }
-            catch(Exception x)
+            catch (Exception x)
             {
                 Log.Error(x.Message);
             }
@@ -65,19 +66,21 @@ namespace FinnanceApp.Server.Services.MontlyService
         }
 
         public async Task<ServiceResponse<string>> AddMontlyBill(MontlyBills bill)
-        { 
-            try{
-            var user = await _utility.GetUser();
-            bill.user = user;
-            await _context.MontlyBills.AddAsync(bill);
-            await _context.SaveChangesAsync();
-            return new ServiceResponse<string>
+        {
+            try
             {
-                Data = String.Empty,
-                isSuccess = true,
-                Message = "Usunięto rachunek miesięczny!"
-            };
-            }catch (Exception x)
+                var user = await _utility.GetUser();
+                bill.user = user;
+                await _context.MontlyBills.AddAsync(bill);
+                await _context.SaveChangesAsync();
+                return new ServiceResponse<string>
+                {
+                    Data = String.Empty,
+                    isSuccess = true,
+                    Message = "Usunięto rachunek miesięczny!"
+                };
+            }
+            catch (Exception x)
             {
                 return new ServiceResponse<string>
                 {
@@ -92,27 +95,29 @@ namespace FinnanceApp.Server.Services.MontlyService
 
         public async Task<ServiceResponse<string>> DeleteMontlyBill(int id)
         {
-            try{
-            var user = await _utility.GetUser();
-            var dBill = await _context.MontlyBills.Where(x => x.id == id && x.user == user).FirstOrDefaultAsync();
-            if (dBill == null)
+            try
             {
+                var user = await _utility.GetUser();
+                var dBill = await _context.MontlyBills.Where(x => x.id == id && x.user == user).FirstOrDefaultAsync();
+                if (dBill == null)
+                {
+                    return new ServiceResponse<string>
+                    {
+                        Data = String.Empty,
+                        isSuccess = false,
+                        Message = "Wystąpił błąd, nie znaleziono rachunku!"
+                    };
+                }
+                _context.MontlyBills.Remove(dBill);
+                await _context.SaveChangesAsync();
                 return new ServiceResponse<string>
                 {
                     Data = String.Empty,
-                    isSuccess = false,
-                    Message = "Wystąpił błąd, nie znaleziono rachunku!"
+                    isSuccess = true,
+                    Message = $"Usunięto rachunek miesięczny: {dBill.name}!"
                 };
             }
-            _context.MontlyBills.Remove(dBill);
-            await _context.SaveChangesAsync();
-            return new ServiceResponse<string>
-            {
-                Data = String.Empty,
-                isSuccess = true,
-                Message = $"Usunięto rachunek miesięczny: {dBill.name}!"
-            };
-            }catch (Exception x)
+            catch (Exception x)
             {
                 return new ServiceResponse<string>
                 {
@@ -126,27 +131,29 @@ namespace FinnanceApp.Server.Services.MontlyService
 
         public async Task<ServiceResponse<string>> EditMontyBill(MontlyBills bill)
         {
-            try{
-             var user = await _utility.GetUser();
-            var dBill = await _context.MontlyBills.Where(x => x.id == bill.id && x.user == user).FirstOrDefaultAsync();
-            if (dBill == null)
+            try
             {
+                var user = await _utility.GetUser();
+                var dBill = await _context.MontlyBills.Where(x => x.id == bill.id && x.user == user).FirstOrDefaultAsync();
+                if (dBill == null)
+                {
+                    return new ServiceResponse<string>
+                    {
+                        Data = String.Empty,
+                        isSuccess = false,
+                        Message = "Wystąpił błąd, nie znaleziono rachunku!"
+                    };
+                }
+                _context.MontlyBills.Update(bill);
+                await _context.SaveChangesAsync();
                 return new ServiceResponse<string>
                 {
                     Data = String.Empty,
-                    isSuccess = false,
-                    Message = "Wystąpił błąd, nie znaleziono rachunku!"
+                    isSuccess = true,
+                    Message = "Zedytowano rachunek miesięczny"
                 };
             }
-            _context.MontlyBills.Update(bill);
-            await _context.SaveChangesAsync();
-            return new ServiceResponse<string>
-            {
-                Data = String.Empty,
-                isSuccess = true,
-                Message = "Zedytowano rachunek miesięczny"
-            };
-            }catch (Exception x)
+            catch (Exception x)
             {
                 return new ServiceResponse<string>
                 {
@@ -158,16 +165,18 @@ namespace FinnanceApp.Server.Services.MontlyService
         }
         public async Task<ServiceResponse<List<MontlyBills>>> GetMontlyBill()
         {
-            try{
-            var user = await _utility.GetUser();
-            var mBills = await _context.MontlyBills.Where(x => x.user == user).Include(entity => entity.shop).Include(entity => entity.person).Include(entity => entity.category).ToListAsync();
-            return new ServiceResponse<List<MontlyBills>>
+            try
             {
-                Data = mBills,
-                isSuccess = true,
-                Message = "Usunięto rachunek miesięczny!"
-            };
-            }catch (Exception x)
+                var user = await _utility.GetUser();
+                var mBills = await _context.MontlyBills.Where(x => x.user == user).Include(entity => entity.shop).Include(entity => entity.person).Include(entity => entity.category).ToListAsync();
+                return new ServiceResponse<List<MontlyBills>>
+                {
+                    Data = mBills,
+                    isSuccess = true,
+                    Message = "Usunięto rachunek miesięczny!"
+                };
+            }
+            catch (Exception x)
             {
                 return new ServiceResponse<List<MontlyBills>>
                 {

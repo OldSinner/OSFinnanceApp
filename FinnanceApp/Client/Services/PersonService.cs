@@ -1,7 +1,6 @@
 ﻿using FinnanceApp.Shared.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace FinnanceApp.Client.Services
         {
             _http = http;
         }
-       
+
 
         public event Action OnChange;
         void PersonChanged() => OnChange.Invoke();
@@ -48,18 +47,18 @@ namespace FinnanceApp.Client.Services
 
         public async Task GetPersonList()
         {
-            if(People.Count==0)
+            if (People.Count == 0)
             {
                 var result = await _http.GetFromJsonAsync<ServiceResponse<List<Person>>>("api/Person");
                 People = result.Data;
             }
-            
-            
+
+
         }
 
         public async Task<ServiceResponse<string>> deletePerson(int id)
         {
-            var result = await _http.DeleteAsync("api/Person/"+ id);
+            var result = await _http.DeleteAsync("api/Person/" + id);
             People.Clear();
             await GetPersonList();
             PersonChanged();
